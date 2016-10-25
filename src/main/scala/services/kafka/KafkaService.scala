@@ -9,12 +9,8 @@ import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.Materializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import java.io.IOException
-
-import HttpMethods._
-import akka.http.scaladsl.model.headers.RawHeader
 import akka.util.ByteString
 import mappings.JsonMappings
-import models.TopicInfo
 import services.Base
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -58,16 +54,20 @@ trait KafkaService extends Base with JsonMappings {
     }
   }
 
-  // TODO falta implementar bien el post
-  def publishInTopic(): Future[Either[String, String]] = {
-    val ent = "{\"value_schema\": \"{\\\"type\\\": \\\"record\\\", \\\"name\\\": \\\"User\\\", \\\"fields\\\": [{\\\"name\\\": \\\"name\\\", \\\"type\\\": \\\"string\\\"}]}\", \"records\": [{\"value\": {\"name\": \"testUser\"}}]}"
+  // TODO falta implementar para un plubish para json y binary
+  def publishInTopicAsAvro(topicName: String, dataToPublish: String): Future[Either[String, String]] = {
+    val ent = """{"records":[{"value":{"foo":"bar"}}]}"""
 
-    val data = ByteString(ent)
-    val request = HttpRequest(POST, uri = "/topics/test", entity = data)
-    request.withHeaders(RawHeader("Content-Type", "application/vnd.kafka.avro.v1+json"))
+    val `application/vnd.kafka.avro.v1+json` = MediaType.applicationWithFixedCharset("vnd.kafka.avro.v1+json", HttpCharsets.`UTF-8`)
+
+    val data = ByteString(dataToPublish)
+    val request = HttpRequest(
+                                uri = s"/topics/$topicName",
+                                method = HttpMethods.POST,
+                                entity =  HttpEntity(data).withContentType(`application/vnd.kafka.avro.v1+json`)
+    )
 
     kafkaRequest(request).flatMap { response =>
-      println(response)
       response.status match {
         case OK => {
           Unmarshal(response.entity.withContentType(ContentTypes.`application/json`)).to[String].map(Right(_))

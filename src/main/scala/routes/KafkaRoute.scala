@@ -4,6 +4,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import akka.http.scaladsl.server.Directives._
 import spray.json._
 import mappings.JsonMappings
+import models.{DataAvroEntity, UserEntityUpdate}
 import services.kafka.KafkaService
 
 trait KafkaRoute extends JsonMappings with SecurityDirectives with KafkaService{
@@ -31,7 +32,9 @@ trait KafkaRoute extends JsonMappings with SecurityDirectives with KafkaService{
         pathEndOrSingleSlash {
           authenticate { loggedUser =>
             post {
-              complete(publishInTopic().map(_.toJson))
+              entity(as[String]) { dataForPublish =>
+                complete(publishInTopicAsAvro(topicName, dataForPublish).map(_.toJson))
+              }
             }
           }
         }
