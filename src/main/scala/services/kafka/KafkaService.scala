@@ -30,9 +30,6 @@ object KafkaService extends Base with JsonMappings {
   props.put("sasl.kerberos.service.name", "kafka")
 
 
-  //props.put("listeners", "PLAINTEXT://localhost:6667")
-  //props.put("security.protocol", "PLAINTEXT")
-
   def publish(message: String): Future[Unit] = {
     println("-------------------------------------")
     println(message)
@@ -41,7 +38,7 @@ object KafkaService extends Base with JsonMappings {
     val TOPIC="uniqueId"
 
     for(i<- 1 to 50){
-      val record = new ProducerRecord(TOPIC, "key", s"hello $i")
+      val record = new ProducerRecord(TOPIC, "key", s"$message $i")
       producer.send(record)
     }
 
