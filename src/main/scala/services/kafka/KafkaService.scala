@@ -2,16 +2,11 @@ package services.kafka
 
 import mappings.JsonMappings
 import services.Base
-import org.apache.avro.Schema
-import org.apache.avro.generic.GenericData
-import org.apache.avro.generic.GenericRecord
 import org.apache.kafka.clients.producer.KafkaProducer
-import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
-import java.util.Date
 import java.util.Properties
-import java.util.Random
-
+import scala.concurrent.ExecutionContext.Implicits.global
+import models.MessageEntity
 import scala.concurrent.Future
 
 object KafkaService extends Base with JsonMappings {
@@ -20,33 +15,26 @@ object KafkaService extends Base with JsonMappings {
   props.put("bootstrap.servers", "sandbox.hortonworks.com:6667")
   props.put("acks", "all")
   props.put("retries", "0")
-  props.put("batch.size", "16384")
-  props.put("linger.ms", "1")
-  props.put("buffer.memory", "33554432")
   props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
   props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-  props.put("retry.backoff.ms", "500")
   props.put("security.protocol", "SASL_PLAINTEXT")
   props.put("sasl.kerberos.service.name", "kafka")
 
 
-  def publish(message: String): Future[Unit] = {
-    println("-------------------------------------")
-    println(message)
+  def publishInTopic(message: MessageEntity): Future[String] = {
     val producer = new KafkaProducer[String, String](props)
+    val topicName = message.topic
+    val record = new ProducerRecord(topicName, "key", message.message)
 
-    val TOPIC="uniqueId"
-
-    for(i<- 1 to 50){
-      val record = new ProducerRecord(TOPIC, "key", s"$message $i")
+    val f: Future[Unit] = Future {
       producer.send(record)
+      producer.close()
     }
 
-    val record = new ProducerRecord(TOPIC, "key", "the end "+new java.util.Date)
-    producer.send(record)
-
-    producer.close()
-    Future.successful()
+    f recoverWith {
+      case ex:Exception => Future.failed(new Exception(ex))
+    }
+    f.mapTo[String]
   }
 
   def fetchTopics(): Future[Unit] = Future.successful()

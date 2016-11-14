@@ -1,10 +1,8 @@
 package routes
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import akka.http.scaladsl.server.Directives._
-import spray.json._
 import mappings.JsonMappings
-import models.{DataAvroEntity, UserEntityUpdate}
+import models.MessageEntity
 import services.kafka.KafkaService._
 
 trait KafkaRoute extends JsonMappings with SecurityDirectives {
@@ -32,8 +30,8 @@ trait KafkaRoute extends JsonMappings with SecurityDirectives {
         pathEndOrSingleSlash {
           authenticate { loggedUser =>
             post {
-              entity(as[String]) { dataForPublish =>
-                complete(publish(dataForPublish).map(_.toJson))
+              entity(as[MessageEntity]) { messageForPublish =>
+                complete(publishInTopic(messageForPublish))
               }
             }
           }
