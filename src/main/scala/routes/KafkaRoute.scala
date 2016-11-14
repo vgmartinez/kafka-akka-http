@@ -5,12 +5,12 @@ import akka.http.scaladsl.server.Directives._
 import spray.json._
 import mappings.JsonMappings
 import models.{DataAvroEntity, UserEntityUpdate}
-import services.kafka.KafkaService
+import services.kafka.KafkaService._
 
-trait KafkaRoute extends JsonMappings with SecurityDirectives with KafkaService{
+trait KafkaRoute extends JsonMappings with SecurityDirectives {
   val kafkaApi = pathPrefix("kafka") {
     pathPrefix("topics") {
-      pathEndOrSingleSlash {
+      /*pathEndOrSingleSlash {
         authenticate { loggedUser =>
           get {
             complete{
@@ -27,13 +27,13 @@ trait KafkaRoute extends JsonMappings with SecurityDirectives with KafkaService{
             }
           }
         }
-      }~
+      }~*/
       path(Rest) { topicName =>
         pathEndOrSingleSlash {
           authenticate { loggedUser =>
             post {
               entity(as[String]) { dataForPublish =>
-                complete(publishInTopicAsAvro(topicName, dataForPublish).map(_.toJson))
+                complete(publish.map(_.toJson))
               }
             }
           }

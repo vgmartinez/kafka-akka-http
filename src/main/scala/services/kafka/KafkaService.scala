@@ -1,83 +1,52 @@
 package services.kafka
 
-import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.client.RequestBuilding
-import akka.http.scaladsl.model._
-import akka.http.scaladsl.model.StatusCodes._
-import akka.http.scaladsl.unmarshalling.Unmarshal
-import akka.stream.Materializer
-import akka.stream.scaladsl.{Flow, Sink, Source}
-import java.io.IOException
-import akka.util.ByteString
 import mappings.JsonMappings
 import services.Base
+import org.apache.avro.Schema
+import org.apache.avro.generic.GenericData
+import org.apache.avro.generic.GenericRecord
+import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.Producer
+import org.apache.kafka.clients.producer.ProducerRecord
+import java.util.Date
+import java.util.Properties
+import java.util.Random
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
-trait KafkaService extends Base with JsonMappings {
-  implicit val system: ActorSystem
-  implicit val executor: ExecutionContext
-  implicit val materializer: Materializer
+object KafkaService extends Base with JsonMappings {
+  val props = new Properties()
 
-  lazy val kafkaConnectionFlow: Flow[HttpRequest, HttpResponse, Any] =
-    Http().outgoingConnection(kafkaHost, kafkaPort)
+  props.put("bootstrap.servers", "localhost:6667")
+  props.put("acks", "all")
+  props.put("retries", "0")
+  props.put("batch.size", "16384")
+  props.put("linger.ms", "1")
+  props.put("buffer.memory", "33554432")
+  props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+  props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+  props.put("retry.backoff.ms", "500")
+  props.put("security.protocol", "SASL_PLAINTEXT")
+  props.put("sasl.kerberos.service.name", "kafka")
 
-  def kafkaRequest(request: HttpRequest): Future[HttpResponse] =
-    Source.single(request).via(kafkaConnectionFlow).runWith(Sink.head)
 
-  def fetchTopics(): Future[Either[String, List[String]]] = {
-    kafkaRequest(RequestBuilding.Get("/topics")).flatMap { response =>
-      response.status match {
-        case OK => {
-          Unmarshal(response.entity.withContentType(ContentTypes.`application/json`)).to[List[String]].map(Right(_))
-        }
-        case BadRequest => Future.successful(Left(s"bad request"))
-        case _ => Unmarshal(response.entity).to[String].flatMap { entity =>
-          val error = s"FAIL - ${response.status}"
-          Future.failed(new IOException(error))
-        }
-      }
+  //props.put("listeners", "PLAINTEXT://localhost:6667")
+  //props.put("security.protocol", "PLAINTEXT")
+
+  def publish(): Future[Unit] = {
+    val producer = new KafkaProducer[String, String](props)
+
+    val TOPIC="uniqueId"
+
+    for(i<- 1 to 50){
+      val record = new ProducerRecord(TOPIC, "key", s"hello $i")
+      producer.send(record)
     }
-  }
 
-  def fetchTopicInfo(topicName: String): Future[Either[String, String]] = {
-    kafkaRequest(RequestBuilding.Get(s"/topics/$topicName")).flatMap { response =>
-      response.status match {
-        case OK => Unmarshal(response.entity.withContentType(ContentTypes.`application/json`)).to[String].map(Right(_))
-        case BadRequest => Future.successful(Left(s"bad request"))
-        case _ => Unmarshal(response.entity).to[String].flatMap { entity =>
-          val error = s"FAIL - ${response.status}"
-          Future.failed(new IOException(error))
-        }
-      }
-    }
-  }
+    val record = new ProducerRecord(TOPIC, "key", "the end "+new java.util.Date)
+    producer.send(record)
 
-  // TODO falta implementar para un plubish para json y binary
-  def publishInTopicAsAvro(topicName: String, dataToPublish: String): Future[Either[String, String]] = {
-    val ent = """{"records":[{"value":{"foo":"bar"}}]}"""
-
-    val `application/vnd.kafka.avro.v1+json` = MediaType.applicationWithFixedCharset("vnd.kafka.avro.v1+json", HttpCharsets.`UTF-8`)
-
-    val data = ByteString(dataToPublish)
-    val request = HttpRequest(
-                                uri = s"/topics/$topicName",
-                                method = HttpMethods.POST,
-                                entity =  HttpEntity(data).withContentType(`application/vnd.kafka.avro.v1+json`)
-    )
-
-    kafkaRequest(request).flatMap { response =>
-      response.status match {
-        case OK => {
-          Unmarshal(response.entity.withContentType(ContentTypes.`application/json`)).to[String].map(Right(_))
-        }
-        case BadRequest => Future.successful(Left(s"bad request"))
-        case _ => Unmarshal(response.entity).to[String].flatMap { entity =>
-          val error = s"FAIL - ${response.status}"
-          Future.failed(new IOException(error))
-        }
-      }
-    }
+    producer.close()
+    Future.successful()
   }
 }
