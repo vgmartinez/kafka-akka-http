@@ -17,7 +17,7 @@ import scala.concurrent.Future
 object KafkaService extends Base with JsonMappings {
   val props = new Properties()
 
-  props.put("bootstrap.servers", "localhost:6667")
+  props.put("bootstrap.servers", "sandbox.hortonworks.com:6667")
   props.put("acks", "all")
   props.put("retries", "0")
   props.put("batch.size", "16384")
