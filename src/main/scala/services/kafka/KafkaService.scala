@@ -3,8 +3,7 @@ package services.kafka
 import mappings.JsonMappings
 import services.Base
 import java.util.Properties
-import akka.http.scaladsl.unmarshalling.Unmarshal
-import models.MessageEntity
+import models.{MessageEntity, MetadataResponse}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -21,14 +20,15 @@ object KafkaService extends Base with JsonMappings {
   props.put("sasl.kerberos.service.name", "kafka")
 
 
-  def publishInTopic(message: MessageEntity): Future[String] = {
+  def publishInTopic(message: MessageEntity): Future[MetadataResponse] = {
     val producer = new KafkaProducer[String, String](props)
     val topicName = message.topic
     val record = new ProducerRecord(topicName, "key", message.message)
 
-    val call = producer.send(record)
+    val producerResponse = producer.send(record).get
+    producer.close()
     Future {
-      call.get().topic()
+      MetadataResponse(producerResponse.topic, producerResponse.partition)
     }
   }
 

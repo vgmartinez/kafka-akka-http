@@ -1,7 +1,6 @@
 package routes
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
 import mappings.JsonMappings

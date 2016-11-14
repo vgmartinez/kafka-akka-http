@@ -1,9 +1,12 @@
 package routes
 
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.model.StatusCodes._
 import mappings.JsonMappings
 import models.MessageEntity
 import services.kafka.KafkaService._
+import scala.concurrent.ExecutionContext.Implicits.global
+import spray.json._
 
 trait KafkaRoute extends JsonMappings with SecurityDirectives {
   val kafkaApi = pathPrefix("kafka") {
@@ -31,7 +34,7 @@ trait KafkaRoute extends JsonMappings with SecurityDirectives {
           authenticate { loggedUser =>
             post {
               entity(as[MessageEntity]) { messageForPublish =>
-                complete(publishInTopic(messageForPublish))
+                complete(OK -> publishInTopic(messageForPublish).map(_.toJson))
               }
             }
           }
