@@ -10,7 +10,7 @@ import services.kafka.KafkaService._
 trait KafkaRoute extends JsonMappings with SecurityDirectives {
   val kafkaApi = pathPrefix("kafka") {
     pathPrefix("topics") {
-      /*pathEndOrSingleSlash {
+      pathEndOrSingleSlash {
         authenticate { loggedUser =>
           get {
             complete{
@@ -27,14 +27,12 @@ trait KafkaRoute extends JsonMappings with SecurityDirectives {
             }
           }
         }
-      }~*/
+      }~
       path(Rest) { topicName =>
         pathEndOrSingleSlash {
           authenticate { loggedUser =>
             post {
-              entity(as[String]) { dataForPublish =>
-                complete(publish.map(_.toJson))
-              }
+              complete(publish("viktor").map(_.toJson))
             }
           }
         }

@@ -33,7 +33,9 @@ object KafkaService extends Base with JsonMappings {
   //props.put("listeners", "PLAINTEXT://localhost:6667")
   //props.put("security.protocol", "PLAINTEXT")
 
-  def publish(): Future[Unit] = {
+  def publish(message: String): Future[Unit] = {
+    println("-------------------------------------")
+    println(message)
     val producer = new KafkaProducer[String, String](props)
 
     val TOPIC="uniqueId"
@@ -49,4 +51,8 @@ object KafkaService extends Base with JsonMappings {
     producer.close()
     Future.successful()
   }
+
+  def fetchTopics(): Future[Unit] = Future.successful()
+
+  def fetchTopicInfo(topicName: String): Future[Unit] = Future.successful()
 }
