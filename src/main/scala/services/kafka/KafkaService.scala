@@ -2,12 +2,12 @@ package services.kafka
 
 import mappings.JsonMappings
 import services.Base
-import org.apache.kafka.clients.producer.KafkaProducer
-import org.apache.kafka.clients.producer.ProducerRecord
 import java.util.Properties
-import scala.concurrent.ExecutionContext.Implicits.global
+import akka.http.scaladsl.unmarshalling.Unmarshal
 import models.MessageEntity
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object KafkaService extends Base with JsonMappings {
   val props = new Properties()
@@ -26,15 +26,10 @@ object KafkaService extends Base with JsonMappings {
     val topicName = message.topic
     val record = new ProducerRecord(topicName, "key", message.message)
 
-    val f: Future[Unit] = Future {
-      producer.send(record)
-      producer.close()
+    val call = producer.send(record)
+    Future {
+      call.get().topic()
     }
-
-    f recoverWith {
-      case ex:Exception => Future.failed(new Exception(ex))
-    }
-    f.mapTo[String]
   }
 
   def fetchTopics(): Future[Unit] = Future.successful()
