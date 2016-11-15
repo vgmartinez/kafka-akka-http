@@ -1,16 +1,20 @@
 package services.kafka
 
+import java.util
+
 import mappings.JsonMappings
 import services.Base
 import java.util.Properties
+
 import models.{MessageEntity, MetadataResponse}
+import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object KafkaService extends Base with JsonMappings {
   val props = new Properties()
-
   props.put("bootstrap.servers", "sandbox.hortonworks.com:6667")
   props.put("acks", "all")
   props.put("retries", "0")
@@ -32,7 +36,11 @@ object KafkaService extends Base with JsonMappings {
     }
   }
 
-  def fetchTopics(): Future[Unit] = Future.successful()
-
-  def fetchTopicInfo(topicName: String): Future[Unit] = Future.successful()
+  def fetchTopics: Future[Seq[String]] = {
+    val consumer = new KafkaConsumer[String, String](props)
+    val topics = consumer.listTopics()
+    Future {
+      topics.keySet().toArray.toSeq
+    }.mapTo
+  }
 }

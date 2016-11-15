@@ -11,31 +11,16 @@ import spray.json._
 trait KafkaRoute extends JsonMappings with SecurityDirectives {
   val kafkaApi = pathPrefix("kafka") {
     pathPrefix("topics") {
-      /*pathEndOrSingleSlash {
+      pathEndOrSingleSlash {
         authenticate { loggedUser =>
           get {
-            complete{
-              fetchTopics().map(_.toJson)
+            complete {
+              fetchTopics.map(_.toJson)
             }
           }
-        }
-      }~
-      path(Rest) { topicName =>
-        pathEndOrSingleSlash {
-          authenticate { loggedUser =>
-            get {
-              complete(fetchTopicInfo(topicName).map(_.toJson))
-            }
-          }
-        }
-      }~*/
-      path(Rest) { topicName =>
-        pathEndOrSingleSlash {
-          authenticate { loggedUser =>
-            post {
-              entity(as[MessageEntity]) { messageForPublish =>
-                complete(OK -> publishInTopic(messageForPublish).map(_.toJson))
-              }
+          post {
+            entity(as[MessageEntity]) { messageForPublish =>
+              complete(OK -> publishInTopic(messageForPublish).map(_.toJson))
             }
           }
         }
