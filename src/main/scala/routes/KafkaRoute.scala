@@ -17,7 +17,7 @@ trait KafkaRoute extends JsonMappings with SecurityDirectives {
             complete {
               fetchTopics.map(_.toJson)
             }
-          }
+          }~
           post {
             entity(as[MessageEntity]) { messageForPublish =>
               complete(OK -> publishInTopic(messageForPublish).map(_.toJson))
