@@ -42,7 +42,8 @@ object KafkaService extends Base with JsonMappings {
     val consumer = new KafkaConsumer[String, String](props)
     val topics = consumer.listTopics()
     Future {
-      topics.keySet().toArray.asInstanceOf[Seq[String]]
+      val seqOfTopics: Seq[String] = for { topicName <- topics.keySet().toArray() } yield topicName.toString
+      seqOfTopics
     }
   }
 }
