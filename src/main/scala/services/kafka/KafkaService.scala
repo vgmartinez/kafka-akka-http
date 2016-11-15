@@ -20,6 +20,8 @@ object KafkaService extends Base with JsonMappings {
   props.put("retries", "0")
   props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
   props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+  props.put("key.deserializer","org.apache.kafka.common.serialization.StringDeserializer")
+  props.put("value.deserializer","org.apache.kafka.common.serialization.StringDeserializer")
   props.put("security.protocol", "SASL_PLAINTEXT")
   props.put("sasl.kerberos.service.name", "kafka")
 
