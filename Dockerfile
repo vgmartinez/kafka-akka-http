@@ -44,16 +44,18 @@ RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/s
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
+RUN adduser --disabled-password --gecos '' victorgarcia
+RUN echo "victorgarcia:viktor" | chpasswd
+
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
-RUN echo "force to clone repo from github 1"
+RUN echo "force to clone repo from github 2"
+
+WORKDIR "/home/victorgarcia"
 
 RUN \
     git clone https://github.com/vgmartinez/kafka-akka-http.git
-
-# Define working directory
-WORKDIR kafka-akka-http
 
 ENV JAVA_OPTS="-Djava.security.auth.login.config=/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djava.security.krb5.conf=/kafka-akka-http/src/main/resources/krb5.conf -Djavax.security.auth.useSubjectCredsOnly=true"
 
