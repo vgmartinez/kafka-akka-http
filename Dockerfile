@@ -55,16 +55,16 @@ RUN echo "force to clone repo from github 3"
 
 WORKDIR "/home/victorgarcia"
 
-RUN \
-    git clone https://github.com/vgmartinez/kafka-akka-http.git
+RUN git clone https://github.com/vgmartinez/kafka-akka-http.git && chown -R victorgarcia:victorgarcia /home/victorgarcia
 
-RUN chown -R victorgarcia:victorgarcia /home/victorgarcia
-
-ENV JAVA_OPTS="-Djava.security.auth.login.config=/home/victorgarcia/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djava.security.krb5.conf=/home/victorgarcia/kafka-akka-http/src/main/resources/krb5.conf -Djavax.security.auth.useSubjectCredsOnly=true -Dsun.security.krb5.debug=true -Dsun.security.jgss.debug=true"
+ENV JAVA_OPTS="-Djava.security.auth.login.config=/home/victorgarcia/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djavax.security.auth.useSubjectCredsOnly=false -Dsun.security.krb5.debug=true -Dsun.security.jgss.debug=true"
 
 EXPOSE 22
 EXPOSE 9002
 
 WORKDIR kafka-akka-http
-CMD ["/usr/sbin/sshd", "-D"]
+
+RUN cp src/main/resources/victorgarcia.keytab /home/victorgarcia && ln -sf /home/victorgarcia/kafka-akka-http/src/main/resources/krb5.conf /etc/krb5.conf
+
+CMD ["sbt", "run"]
 
