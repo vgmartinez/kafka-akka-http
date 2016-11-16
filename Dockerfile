@@ -16,7 +16,8 @@ RUN \
   add-apt-repository ppa:webupd8team/java -y && \
   apt-get update && \
   echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
-  apt-get install -y oracle-java8-installer
+  apt-get install -y oracle-java8-installer && \
+  apt-get install -y oracle-java8-unlimited-jce-policy
 
 RUN \
   curl -L -o sbt-$SBT_VERSION.deb http://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb && \
@@ -50,17 +51,19 @@ RUN echo "victorgarcia:viktor" | chpasswd
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
-RUN echo "force to clone repo from github 2"
+RUN echo "force to clone repo from github 3"
 
 WORKDIR "/home/victorgarcia"
 
 RUN \
     git clone https://github.com/vgmartinez/kafka-akka-http.git
 
-ENV JAVA_OPTS="-Djava.security.auth.login.config=/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djava.security.krb5.conf=/kafka-akka-http/src/main/resources/krb5.conf -Djavax.security.auth.useSubjectCredsOnly=true"
+RUN chown -R victorgarcia:victorgarcia /home/victorgarcia
+
+ENV JAVA_OPTS="-Djava.security.auth.login.config=/home/victorgarcia/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djava.security.krb5.conf=/home/victorgarcia/kafka-akka-http/src/main/resources/krb5.conf -Djavax.security.auth.useSubjectCredsOnly=true"
 
 EXPOSE 22
 EXPOSE 9001
 
 CMD ["/usr/sbin/sshd", "-D"]
-
+CMD ["sbt", "run"]
