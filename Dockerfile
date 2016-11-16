@@ -57,7 +57,7 @@ WORKDIR "/home/victorgarcia"
 
 RUN git clone https://github.com/vgmartinez/kafka-akka-http.git && chown -R victorgarcia:victorgarcia /home/victorgarcia
 
-ENV JAVA_OPTS="-Djava.security.auth.login.config=/home/victorgarcia/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djavax.security.auth.useSubjectCredsOnly=false -Dsun.security.krb5.debug=true -Dsun.security.jgss.debug=true"
+ENV JAVA_OPTS="-Djava.security.auth.login.config=/home/victorgarcia/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djavax.security.auth.useSubjectCredsOnly=false"
 
 EXPOSE 22
 EXPOSE 9002
