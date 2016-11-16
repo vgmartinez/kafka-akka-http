@@ -2,11 +2,12 @@ package services.users
 
 import models.{TokenEntity, UserEntity}
 import slick.driver.PostgresDriver.api._
+
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import services.Base
 import UsersService._
-
+import LDAPValidations._
 object AuthService extends Base {
 
   def signIn(login: String, password: String): Future[Option[TokenEntity]] = {
@@ -25,11 +26,13 @@ object AuthService extends Base {
     create(newUser).flatMap(user => createToken(user))
   }
 
-  def authenticate(token: String): Future[Option[UserEntity]] =
+  def authenticate(token: String): Future[Option[UserEntity]] = {
+    println(validateForLDAP("riemann", "password"))
     db.run((for {
       token <- tokenTable.filter(_.token === token)
       user <- usersTable.filter(_.id === token.userId)
     } yield user).result.headOption)
+  }
 
   def createToken(user: UserEntity): Future[TokenEntity] = db.run(tokenTable returning tokenTable += TokenEntity(userId = user.id))
 

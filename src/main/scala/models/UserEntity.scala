@@ -1,5 +1,7 @@
 package models
 
+case class  UserLogin(username: String, password: String)
+
 case class UserEntity(id: Option[UserId], username: String, password: String, age: Int, gender: Int) {
   require(!username.isEmpty, "username.empty")
   require(!password.isEmpty, "password.empty")

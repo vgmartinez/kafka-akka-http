@@ -17,7 +17,4 @@ trait Config {
 
   val kafkaHost = kafkaConfig.getString("default_host")
   val kafkaPort = kafkaConfig.getInt("default_port")
-  val kafkaUserName = kafkaConfig.getString("default_username")
-  val kafkaPassword = kafkaConfig.getString("default_password")
-  val kafkaProtocol = kafkaConfig.getString("default_protocol")
 }
