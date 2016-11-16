@@ -1,5 +1,5 @@
 #
-# Scala and sbt Dockerfile
+# Scala, sbt, krb5 Dockerfile
 #
 
 # Pull base image
@@ -8,7 +8,7 @@ FROM ubuntu:16.04
 ENV SCALA_VERSION 2.11.8
 ENV SBT_VERSION 0.13.13
 
-# Install sbt
+# Install java
 RUN \
   apt-get update && \
   apt-get install -y curl && \
@@ -19,6 +19,7 @@ RUN \
   apt-get install -y oracle-java8-installer && \
   apt-get install -y oracle-java8-unlimited-jce-policy
 
+# Install sbt
 RUN \
   curl -L -o sbt-$SBT_VERSION.deb http://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb && \
   dpkg -i sbt-$SBT_VERSION.deb && \
@@ -43,19 +44,16 @@ RUN echo 'root:viktor' | chpasswd
 RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-
-RUN adduser --disabled-password --gecos '' victorgarcia
-RUN echo "victorgarcia:viktor" | chpasswd
+RUN \
+    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
+    adduser --disabled-password --gecos '' victorgarcia && echo "victorgarcia:viktor" | chpasswd
 
 ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile
-
-RUN echo "force to clone repo from github 3"
+RUN echo "export VISIBLE=now" >> /etc/profile && echo "force to clone repo from github 4"
 
 WORKDIR "/home/victorgarcia"
 
-RUN git clone https://github.com/vgmartinez/kafka-akka-http.git && chown -R victorgarcia:victorgarcia /home/victorgarcia
+RUN git clone https://github.com/vgmartinez/kafka-akka-http.git
 
 ENV JAVA_OPTS="-Djava.security.auth.login.config=/home/victorgarcia/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djavax.security.auth.useSubjectCredsOnly=false"
 
@@ -66,5 +64,9 @@ WORKDIR kafka-akka-http
 
 RUN cp src/main/resources/victorgarcia.keytab /home/victorgarcia && ln -sf /home/victorgarcia/kafka-akka-http/src/main/resources/krb5.conf /etc/krb5.conf
 
-CMD ["sbt", "run"]
+RUN chown -R victorgarcia:victorgarcia /home/victorgarcia
+
+#CMD ["sbt", "run"]
+
+CMD ["/usr/sbin/sshd", "-D"]
 
