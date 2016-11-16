@@ -60,10 +60,11 @@ RUN \
 
 RUN chown -R victorgarcia:victorgarcia /home/victorgarcia
 
-ENV JAVA_OPTS="-Djava.security.auth.login.config=/home/victorgarcia/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djava.security.krb5.conf=/home/victorgarcia/kafka-akka-http/src/main/resources/krb5.conf -Djavax.security.auth.useSubjectCredsOnly=true"
+ENV JAVA_OPTS="-Djava.security.auth.login.config=/home/victorgarcia/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djava.security.krb5.conf=/home/victorgarcia/kafka-akka-http/src/main/resources/krb5.conf -Djavax.security.auth.useSubjectCredsOnly=true -Dsun.security.krb5.debug=true -Dsun.security.jgss.debug=true"
 
 EXPOSE 22
-EXPOSE 9001
+EXPOSE 9002
 
+WORKDIR kafka-akka-http
 CMD ["/usr/sbin/sshd", "-D"]
-CMD ["sbt", "run"]
+

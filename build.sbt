@@ -33,21 +33,3 @@ libraryDependencies ++= {
     "com.typesafe.akka"  %% "akka-http-testkit-experimental"       % akkaStreamVersion
   )
 }
-
-enablePlugins(JavaAppPackaging)
-
-enablePlugins(UniversalPlugin)
-
-mappings in Universal += file("src/main/resources/kafka_jaas.conf") -> "kafka_jaas.conf"
-
-mappings in Universal += file("src/main/resources/krb5.conf") -> "krb5.conf"
-
-mappings in Universal += file("src/main/resources/victorgarcia.keytab") -> "victorgarcia.keytab"
-
-defaultLinuxInstallLocation in Docker := "/home/victorgarcia"
-
-maintainer in Docker  := "Victor"
-
-dockerRepository := Some("vgmartinez")
-
-dockerExposedPorts in Docker := Seq(9003, 22)
