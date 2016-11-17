@@ -1,15 +1,10 @@
 package services.kafka
 
-import java.security.PrivilegedExceptionAction
-
 import services.Base
 import java.util.Properties
-
 import models.{MessageEntity, MetadataResponse}
-import org.apache.hadoop.security.UserGroupInformation
 import org.apache.kafka.clients.consumer.KafkaConsumer
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord, RecordMetadata}
-
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -29,16 +24,8 @@ object KafkaService extends Base {
     val producer = new KafkaProducer[String, String](props)
     val topicName = message.topic
     val record = new ProducerRecord(topicName, "key", message.message)
-    var producerResponse: RecordMetadata = null
 
-    val ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI("victorgarcia", "/home/victorgarcia/victorgarcia.keytab")
-
-    ugi.doAs(new PrivilegedExceptionAction[Unit] {
-      def run(): Unit = {
-        producerResponse = producer.send(record).get
-      }
-    })
-
+    val producerResponse = producer.send(record).get
     producer.close()
     Future {
       MetadataResponse(producerResponse.topic, producerResponse.partition)
