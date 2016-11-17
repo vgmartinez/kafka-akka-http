@@ -62,7 +62,7 @@ EXPOSE 9002
 
 WORKDIR kafka-akka-http
 
-RUN cp src/main/resources/victorgarcia.keytab /home/victorgarcia && ln -sf /home/victorgarcia/kafka-akka-http/src/main/resources/krb5.conf /etc/krb5.conf
+RUN ln -sf /home/victorgarcia/kafka-akka-http/src/main/resources/krb5.conf /etc/krb5.conf
 
 RUN chown -R victorgarcia:victorgarcia /home/victorgarcia
 
