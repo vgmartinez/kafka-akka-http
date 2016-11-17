@@ -40,31 +40,31 @@ RUN \
     DEBIAN_FRONTEND=noninteractive apt-get install -y krb5-user
 
 RUN mkdir /var/run/sshd
-RUN echo 'root:viktor' | chpasswd
+RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
 RUN \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
-    adduser --disabled-password --gecos '' victorgarcia && echo "victorgarcia:viktor" | chpasswd
+    adduser --disabled-password --gecos '' kst && echo "kst:kst" | chpasswd
 
 ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile && echo "force to clone repo from github 4"
+RUN echo "export VISIBLE=now" >> /etc/profile && echo "force to clone repo from github 5"
 
-WORKDIR "/home/victorgarcia"
+WORKDIR "/home/kst"
 
 RUN git clone https://github.com/vgmartinez/kafka-akka-http.git
 
-ENV JAVA_OPTS="-Djava.security.auth.login.config=/home/victorgarcia/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djavax.security.auth.useSubjectCredsOnly=false"
+ENV JAVA_OPTS="-Djava.security.auth.login.config=/home/kst/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djavax.security.auth.useSubjectCredsOnly=false"
 
 EXPOSE 22
 EXPOSE 9002
 
 WORKDIR kafka-akka-http
 
-RUN ln -sf /home/victorgarcia/kafka-akka-http/src/main/resources/krb5.conf /etc/krb5.conf
+RUN ln -sf /home/kst/kafka-akka-http/src/main/resources/krb5.conf /etc/krb5.conf
 
-RUN chown -R victorgarcia:victorgarcia /home/victorgarcia
+RUN chown -R kst:kst /home/kst
 
 #CMD ["sbt", "run"]
 
