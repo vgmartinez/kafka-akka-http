@@ -49,7 +49,7 @@ RUN \
     adduser --disabled-password --gecos '' kst && echo "kst:kst" | chpasswd
 
 ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile && echo "force to clone repo from github 5"
+RUN echo "export VISIBLE=now" >> /etc/profile && echo "force to clone repo from github 6"
 
 WORKDIR "/home/kst"
 
@@ -66,7 +66,7 @@ RUN ln -sf /home/kst/kafka-akka-http/src/main/resources/krb5.conf /etc/krb5.conf
 
 RUN chown -R kst:kst /home/kst
 
-#CMD ["sbt", "run"]
+CMD ["sbt", "run"]
 
-CMD ["/usr/sbin/sshd", "-D"]
+#CMD ["/usr/sbin/sshd", "-D"]
 
