@@ -1,5 +1,5 @@
 #
-# Scala, sbt, krb5 Dockerfile
+# Scala, sbt, krb5
 #
 
 # Pull base image
@@ -19,7 +19,7 @@ RUN \
   apt-get install -y oracle-java8-installer && \
   apt-get install -y oracle-java8-unlimited-jce-policy
 
-# Install sbt
+# Install sbt, git and openssh
 RUN \
   curl -L -o sbt-$SBT_VERSION.deb http://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb && \
   dpkg -i sbt-$SBT_VERSION.deb && \
@@ -30,12 +30,12 @@ RUN \
   apt-get install -y openssh-server
 
 # Install Scala
-## Piping curl directly in tar
 RUN \
   curl -fsL http://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz | tar xfz - -C /root/ && \
   echo >> /root/.bashrc && \
   echo 'export PATH=~/scala-$SCALA_VERSION/bin:$PATH' >> /root/.bashrc
 
+# Install kerberos client
 RUN \
     DEBIAN_FRONTEND=noninteractive apt-get install -y krb5-user
 
@@ -57,14 +57,14 @@ RUN git clone https://github.com/vgmartinez/kafka-akka-http.git
 
 ENV JAVA_OPTS="-Djava.security.auth.login.config=/home/kst/kafka-akka-http/src/main/resources/kafka_jaas.conf -Djavax.security.auth.useSubjectCredsOnly=false"
 
-EXPOSE 22
-EXPOSE 9002
-
 WORKDIR kafka-akka-http
 
-RUN ln -sf /home/kst/kafka-akka-http/src/main/resources/krb5.conf /etc/krb5.conf
+RUN \
+    ln -sf /home/kst/kafka-akka-http/src/main/resources/krb5.conf /etc/krb5.conf && \
+    chown -R kst:kst /home/kst
 
-RUN chown -R kst:kst /home/kst
+EXPOSE 22
+EXPOSE 9002
 
 CMD ["sbt", "run"]
 
