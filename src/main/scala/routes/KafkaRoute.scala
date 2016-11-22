@@ -5,10 +5,11 @@ import akka.http.scaladsl.model.StatusCodes._
 import mappings.JsonMappings
 import models.MessageEntity
 import services.kafka.KafkaService._
+import services.kafka.RangerService
 import scala.concurrent.ExecutionContext.Implicits.global
 import spray.json._
 
-trait KafkaRoute extends JsonMappings with SecurityDirectives {
+trait KafkaRoute extends JsonMappings with SecurityDirectives with RangerService {
   val kafkaApi = pathPrefix("kafka") {
     pathPrefix("topics") {
       pathEndOrSingleSlash {
@@ -20,7 +21,9 @@ trait KafkaRoute extends JsonMappings with SecurityDirectives {
           }~
           post {
             entity(as[MessageEntity]) { messageForPublish =>
-              complete(OK -> publishInTopic(messageForPublish).map(_.toJson))
+              authorize(isAuthorizeForPublish(loggedUser.username, messageForPublish.topic)) {
+                complete(OK -> publishInTopic(messageForPublish).map(_.toJson))
+              }
             }
           }
         }
