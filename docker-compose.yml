@@ -1,9 +1,8 @@
 version: "2"
 
 services:
-
   api:
-    command: "scala-2.11/kafkaRestApi-assembly-1.0.0.jar path/sdd/dev"
+    command: "scala-2.11/kafkaRestApi-assembly-1.0.0.jar kst-cognosfera/kafka-rest/loc"
     ports:
       - "9002:9002"
     container_name: cognosfera_kafka_api
@@ -14,3 +13,11 @@ services:
       DOMAIN_REALM: node.dc1.consul
       KDC_ADDRESS: sandbox.hortonworks.com
       KDC_PORT: 88
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: congnosfera_postgres
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
