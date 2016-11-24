@@ -1,0 +1,6 @@
+target/resolution-cache
+target/.history
+target/streams
+target/test-reports
+target/scala-2.11/classes
+target/scala-2.11/test-classes
