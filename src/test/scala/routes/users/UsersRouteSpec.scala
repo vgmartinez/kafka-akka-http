@@ -20,7 +20,7 @@ class UsersRouteSpec extends BaseSpec with ScalaFutures{
     }
 
     "retrieve user by id" in new Context {
-      val testUser = testUsers(0)
+      val testUser = testUsers.head
       val header = "Token" -> testTokens.find(_.userId.contains(testUser.id.get)).get.token
 
       Get(s"/users/${testUser.id.get}").withHeaders(RawHeader(header._1, header._2)) ~> usersApi ~> check {
@@ -29,7 +29,7 @@ class UsersRouteSpec extends BaseSpec with ScalaFutures{
     }
 
     "update user by id and retrieve it" in new Context {
-      val testUser = testUsers(0)
+      val testUser = testUsers.head
       val header = "Token" -> testTokens.find(_.userId.contains(testUser.id.get)).get.token
       val newUsername = Random.nextString(10)
       val requestEntity = HttpEntity(MediaTypes.`application/json`, s"""{"username": "$newUsername"}""")
@@ -43,7 +43,7 @@ class UsersRouteSpec extends BaseSpec with ScalaFutures{
     }
 
     "delete user" in new Context {
-      val testUser = testUsers(0)
+      val testUser = testUsers.head
       val header = "Token" -> testTokens.find(_.userId.contains(testUser.id.get)).get.token
       Delete(s"/users/${testUser.id.get}").withHeaders(RawHeader(header._1, header._2)) ~> usersApi ~> check {
         response.status should be(NoContent)
@@ -54,7 +54,7 @@ class UsersRouteSpec extends BaseSpec with ScalaFutures{
     }
 
     "retrieve currently logged user" in new Context {
-      val testUser = testUsers(0)
+      val testUser = testUsers.head
       val header = "Token" -> testTokens.find(_.userId.contains(testUser.id.get)).get.token
 
       Get("/users/me").withHeaders(RawHeader(header._1, header._2)) ~> usersApi ~> check {

@@ -49,7 +49,7 @@ RUN \
     adduser --disabled-password --gecos '' kst && echo "kst:kst" | chpasswd
 
 ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile && echo "force to clone repo from github 6"
+RUN echo "export VISIBLE=now" >> /etc/profile && echo "force to clone repo from github 7"
 
 WORKDIR "/home/kst"
 

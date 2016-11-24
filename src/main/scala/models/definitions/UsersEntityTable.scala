@@ -1,6 +1,6 @@
 package models.definitions
 
-import models.{UserId, UserEntity}
+import models.{UserEntity, UserId}
 import slick.driver.PostgresDriver.api._
 
 class UsersEntityTable(tag: Tag) extends Table[UserEntity](tag, "users"){
@@ -11,4 +11,3 @@ class UsersEntityTable(tag: Tag) extends Table[UserEntity](tag, "users"){
   def gender = column[Int]("gender")
   def * = (id.?, username, password, age, gender) <> ((UserEntity.apply _).tupled, UserEntity.unapply)
 }
-

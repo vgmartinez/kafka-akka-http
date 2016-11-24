@@ -12,6 +12,6 @@ case class Topic(values: List[String], isExcludes: Boolean, isRecursive: Boolean
 case class Resource(topic: Topic)
 
 case class PolicyEntity(id: Int, isEnabled: Boolean, version: Int, service: String, name: String, policyType: Int, isAuditEnabled: Boolean, resources: Resource,
-                        policyItems: List[PolicyItems], denyPolicyItems: List[String], allowExceptions: List[String], denyExceptions: List[String], dataMaskPolicyItems: List[String],
-                        rowFilterPolicyItems: List[String])
+                        policyItems: List[PolicyItems], denyPolicyItems: List[String], allowExceptions: List[String], denyExceptions: List[String],
+                        dataMaskPolicyItems: List[String], rowFilterPolicyItems: List[String])
 

@@ -27,7 +27,6 @@ object AuthService extends Base {
   }
 
   def authenticate(token: String): Future[Option[UserEntity]] = {
-    println(validateForLDAP("riemann", "password"))
     db.run((for {
       token <- tokenTable.filter(_.token === token)
       user <- usersTable.filter(_.id === token.userId)

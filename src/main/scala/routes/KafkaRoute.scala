@@ -5,8 +5,7 @@ import akka.http.scaladsl.model.StatusCodes._
 import mappings.JsonMappings
 import models.MessageEntity
 import services.kafka.KafkaService._
-import services.kafka.RangerService
-import scala.concurrent.ExecutionContext.Implicits.global
+import services.ranger.RangerService
 import spray.json._
 
 trait KafkaRoute extends JsonMappings with SecurityDirectives with RangerService {

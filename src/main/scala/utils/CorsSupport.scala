@@ -11,10 +11,12 @@ trait CorsSupport {
   lazy val allowedOriginHeader = {
     val config = ConfigFactory.load()
     val sAllowedOrigin = config.getString("cors.allowed-origin")
-    if (sAllowedOrigin == "*")
+    if (sAllowedOrigin == "*") {
       `Access-Control-Allow-Origin`.*
-    else
+    }
+    else {
       `Access-Control-Allow-Origin`(HttpOrigin(sAllowedOrigin))
+    }
   }
 
   private def addAccessControlHeaders: Directive0 = {
@@ -27,13 +29,12 @@ trait CorsSupport {
   }
 
   private def preflightRequestHandler: Route = options {
-    complete(HttpResponse(200).withHeaders(
-      `Access-Control-Allow-Methods`(OPTIONS, POST, PUT, GET, DELETE)
-    )
+    complete(HttpResponse(200)
+      .withHeaders(`Access-Control-Allow-Methods`(OPTIONS, POST, PUT, GET, DELETE))
     )
   }
 
-  def corsHandler(r: Route) = addAccessControlHeaders {
+  def corsHandler(r: Route): Unit = addAccessControlHeaders {
     preflightRequestHandler ~ r
   }
 }

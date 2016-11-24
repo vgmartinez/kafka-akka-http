@@ -8,7 +8,6 @@ import routes.Routes
 import services.users.AuthService._
 import services.users.UsersService._
 import utils.InMemoryPostgresStorage._
-
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 import scala.util.Random

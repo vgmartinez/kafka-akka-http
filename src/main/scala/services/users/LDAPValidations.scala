@@ -1,18 +1,17 @@
+
 package services.users
 
 import java.util.Properties
 import javax.naming.{Context, NamingEnumeration}
 import javax.naming.directory.{InitialDirContext, SearchControls, SearchResult}
 
-import scala.util.{Failure, Success, Try}
-
 /**
   * Created by victorgarcia on 15/11/16.
   */
 object LDAPValidations {
 
-  def validateForLDAP(username: String, passcode: String): Boolean = {
-    val result = Try {
+  def validateForLDAP(username: String, passcode: String): String = {
+    try {
       val props = new Properties
       props.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory")
       props.put(Context.PROVIDER_URL, "ldap://ldap.forumsys.com:389")
@@ -28,13 +27,11 @@ object LDAPValidations {
 
       val answers: NamingEnumeration[SearchResult] = context.search("dc=example, dc=com", s"uid=$username", controls)
       val result: SearchResult = answers.nextElement
-      val user: String = result.getNameInNamespace
+      result.getName
     }
-    result match {
-      case Success(v) => true
-      case Failure(v) => {
-        println(v.printStackTrace())
-        false
+    catch {
+      case e: Exception => {
+        null
       }
     }
   }

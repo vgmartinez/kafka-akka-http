@@ -1,7 +1,7 @@
 package utils
 import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 
-trait DatabaseConfig extends Config{
+trait DatabaseConfig extends Config {
   private val hikariConfig = new HikariConfig()
   hikariConfig.setJdbcUrl(databaseUrl)
   hikariConfig.setUsername(databaseUser)
