@@ -1,0 +1,46 @@
+200:
+  description: Topics successfully retrieved
+  body:
+    application/json:
+      example: |
+        {
+          "result": {
+            "statusCode": 200,
+            "code": "HERMESMSBACKOFFICE200",
+            "message": "Users successfully retrieved"
+          }
+        }
+400:
+  description: Bad request. Incorrect params
+  body:
+    application/json:
+      example: |
+        {
+          "result": {
+            "code": "KSTGEN400",
+            "message": "Bad request"
+          }
+        }
+401:
+  description: Invalid auth token
+  body:
+    application/json:
+      example: |
+        {
+          "result": {
+            "statusCode": 401,
+            "code": "HERMESMSBACKOFFICE401",
+            "message": "The authorization token is invalid"
+          }
+        }
+500:
+  description: Internal error
+  body:
+    application/json:
+      example: |
+        {
+          "result": {
+            "code": "KSTGEN500",
+            "message": "Internal error"
+          }
+        }

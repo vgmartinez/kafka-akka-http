@@ -7,7 +7,6 @@ import models.UserEntity
 import org.scalatest.concurrent.ScalaFutures
 import services.BaseSpec
 import services.users.UsersService._
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import scala.util.Random
 
 class UsersRouteSpec extends BaseSpec with ScalaFutures{

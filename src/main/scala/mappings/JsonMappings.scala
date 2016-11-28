@@ -10,7 +10,8 @@ trait JsonMappings extends SprayJsonSupport with DefaultJsonProtocol {
   implicit val loginFormat = jsonFormat2(LoginPassword)
   implicit val userEntityUpdateFormat = jsonFormat4(UserEntityUpdate)
   implicit val messageFormat = jsonFormat2(MessageEntity.apply)
-  implicit val metadataResponse = jsonFormat2(MetadataResponse)
+  implicit val metadataResponse = jsonFormat3(Metadata)
+  implicit val resultResponse = jsonFormat4(Result)
 
   implicit val accessesEntity = jsonFormat2(Accesses)
   implicit val policyItemsEntity = jsonFormat5(PolicyItems)

@@ -1,0 +1,4 @@
+Authorization:
+  description: User authentication token
+  required: true
+  example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IndpbGxpYW1zLmFndWlsZXJhQGJidmEuY29tIiw

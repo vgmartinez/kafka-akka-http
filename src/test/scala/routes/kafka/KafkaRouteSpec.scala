@@ -1,11 +1,13 @@
 package routes.kafka
 
-import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.model.headers.RawHeader
 import org.scalatest.concurrent.ScalaFutures
 import services.BaseSpec
+import services.kafka.KafkaService._
 
 class KafkaRouteSpec extends BaseSpec with ScalaFutures{
+
+  val
+
   "Kafka service" should {
 
   }

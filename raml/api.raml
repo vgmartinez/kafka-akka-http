@@ -1,0 +1,22 @@
+#%RAML 0.8
+---
+title: cognos-ms-kafka
+version: v1
+baseUri: /{version}
+
+mediaType: application/json
+
+## Publish in kafka
+/kafka:
+  description: General endpoint for publish in kafka topic
+  /topics:
+    get:
+      description: Get all the topics
+      headers: !include schemas/header/authToken.yml
+      responses: !include responses/getTopics.yml
+    post:
+      description: Publish in topic
+      headers: !include schemas/header/authToken.yml
+      body:
+        example: !include schemas/examples/publishInTopic.json
+      responses: !include responses/publishInTopic.yml

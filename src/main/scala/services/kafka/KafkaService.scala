@@ -3,9 +3,11 @@ package services.kafka
 
 import services.Base
 import java.util.Properties
-import models.{MessageEntity, MetadataResponse}
+
+import models.{MessageEntity, Metadata, Result}
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -21,20 +23,25 @@ object KafkaService extends Base {
   props.put("security.protocol", "SASL_PLAINTEXT")
   props.put("sasl.kerberos.service.name", "kafka")
 
-  //System.setProperty("java.security.krb5.conf", "/etc/krb5.conf")
-  //System.setProperty("java.security.auth.login.config", "/home/kst/kafka-akka-http/src/main/resources/kafka_jaas.conf")
-  //System.setProperty("javax.security.auth.useSubjectCredsOnly", "false")
-  //System.setProperty("sun.security.krb5.debug", "true")
+  val producer = new KafkaProducer[String, String](props)
 
-  def publishInTopic(message: MessageEntity): Future[MetadataResponse] = {
-    val producer = new KafkaProducer[String, String](props)
+  def publishInTopic(message: MessageEntity): Future[Option[Result]] = {
     val topicName = message.topic
     val record = new ProducerRecord(topicName, "key", message.message)
-
-    val producerResponse = producer.send(record).get
-    producer.close()
-    Future {
-      MetadataResponse(producerResponse.topic, producerResponse.partition)
+    try {
+      val producerResponse = producer.send(record).get
+      val metadata = Metadata(producerResponse.timestamp, producerResponse.topic, producerResponse.partition)
+      Future.successful {
+        Some(Result(200, "COGNOS200", "Successful publish in topic", Some(metadata)))
+      }
+    } catch {
+      case e: Exception => {
+        Future.successful {
+          Some(Result(500, "COGNOS500", "Internal error server"))
+        }
+      }
+    } finally {
+      producer.close()
     }
   }
 

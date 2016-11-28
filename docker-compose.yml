@@ -5,6 +5,8 @@ services:
     command: "scala-2.11/kafkaRestApi-assembly-1.0.0.jar kst-cognosfera/kafka-rest/loc"
     ports:
       - "9002:9002"
+    external_links:
+      - sandbox
     container_name: cognosfera_kafka_api
     image: dev.docker.kickstartteam.es:5000/kst/cognosfera/demo-kafka-api:0.0.1
     environment:
@@ -21,3 +23,4 @@ services:
     image: postgres
     environment:
       POSTGRES_PASSWORD: postgres
+
