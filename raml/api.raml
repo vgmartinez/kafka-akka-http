@@ -11,7 +11,21 @@ mediaType: application/json
   description: General endpoint for publish in kafka topic
   /topics:
     get:
-      description: Get all the topics
+      description: Get all topics
+      headers: !include schemas/header/authToken.yml
+      responses: !include responses/getTopics.yml
+    post:
+      description: Publish in topic
+      headers: !include schemas/header/authToken.yml
+      body:
+        example: !include schemas/examples/publishInTopic.json
+      responses: !include responses/publishInTopic.yml
+
+/users:
+  description: General endpoint for publish in kafka topic
+  /topics:
+    get:
+      description: Get all topics
       headers: !include schemas/header/authToken.yml
       responses: !include responses/getTopics.yml
     post:

@@ -151,45 +151,48 @@
         word-wrap: normal;
         white-space: pre;
       }
-    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>cognos-ms-kafka API documentation <small>version v1</small></h1><p>/v1</p></div><div class="panel panel-default"><div class="panel-heading"><h3 id="kafka" class="panel-title">/kafka</h3></div><div class="panel-body"><div class="top-resource-description"><p>General endpoint for backoffice management</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_kafka_topics"><span class="parent">/kafka</span>/topics</a> <span class="methods"><a href="#kafka_topics_get"><span class="badge badge_get">get</span></a> <a href="#kafka_topics_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_kafka_topics" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#kafka_topics_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Get all the users for the backoffice</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#kafka_topics_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Validates an user into the system</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="kafka_topics_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/kafka</span>/topics</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get all the users for the backoffice</p></div><ul class="nav nav-tabs"><li class="active"><a href="#kafka_topics_get_request" data-toggle="tab">Request</a></li><li><a href="#kafka_topics_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="kafka_topics_get_request"><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>User authentication token</p><p><strong>Example</strong>:</p><pre>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IndpbGxpYW1zLmFndWlsZXJhQGJidmEuY29tIiw</pre></li></ul></div><div class="tab-pane" id="kafka_topics_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Topics successfully retrieved</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>cognos-ms-kafka API documentation <small>version v1</small></h1><p>/v1</p></div><div class="panel panel-default"><div class="panel-heading"><h3 id="kafka" class="panel-title">/kafka</h3></div><div class="panel-body"><div class="top-resource-description"><p>General endpoint for publish in kafka topic</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_kafka_topics"><span class="parent">/kafka</span>/topics</a> <span class="methods"><a href="#kafka_topics_get"><span class="badge badge_get">get</span></a> <a href="#kafka_topics_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_kafka_topics" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#kafka_topics_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Get all topics</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#kafka_topics_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Publish in topic</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="kafka_topics_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/kafka</span>/topics</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get all topics</p></div><ul class="nav nav-tabs"><li class="active"><a href="#kafka_topics_get_request" data-toggle="tab">Request</a></li><li><a href="#kafka_topics_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="kafka_topics_get_request"><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>User authentication token</p><p><strong>Example</strong>:</p><pre>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IndpbGxpYW1zLmFndWlsZXJhQGJidmEuY29tIiw</pre></li></ul></div><div class="tab-pane" id="kafka_topics_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Topics successfully retrieved</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
   "result": {
     "statusCode": 200,
-    "code": "HERMESMSBACKOFFICE200",
-    "message": "Users successfully retrieved"
+    "code": "COGNOS200",
+    "message": "Topics successfully retrieved"
+  },
+  "data": {
+      "topics": ["uniqueId", "hermes"]
   }
 }
 </code></pre><h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2><p>Bad request. Incorrect params</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
   "result": {
-    "code": "KSTGEN400",
+    "code": "COGNOS400",
     "message": "Bad request"
   }
 }
 </code></pre><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><p>Invalid auth token</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
   "result": {
     "statusCode": 401,
-    "code": "HERMESMSBACKOFFICE401",
+    "code": "COGNOS401",
     "message": "The authorization token is invalid"
   }
 }
 </code></pre><h2>HTTP status code <a href="http://httpstatus.es/500" target="_blank">500</a></h2><p>Internal error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
   "result": {
-    "code": "KSTGEN500",
+    "code": "COGNOS500",
     "message": "Internal error"
   }
 }
-</code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="kafka_topics_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/kafka</span>/topics</h4></div><div class="modal-body"><div class="alert alert-info"><p>Validates an user into the system</p></div><ul class="nav nav-tabs"><li class="active"><a href="#kafka_topics_post_request" data-toggle="tab">Request</a></li><li><a href="#kafka_topics_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="kafka_topics_post_request"><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>User authentication token</p><p><strong>Example</strong>:</p><pre>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IndpbGxpYW1zLmFndWlsZXJhQGJidmEuY29tIiw</pre></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+</code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="kafka_topics_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/kafka</span>/topics</h4></div><div class="modal-body"><div class="alert alert-info"><p>Publish in topic</p></div><ul class="nav nav-tabs"><li class="active"><a href="#kafka_topics_post_request" data-toggle="tab">Request</a></li><li><a href="#kafka_topics_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="kafka_topics_post_request"><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>User authentication token</p><p><strong>Example</strong>:</p><pre>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IndpbGxpYW1zLmFndWlsZXJhQGJidmEuY29tIiw</pre></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
   "topic": "uniqueId",
   "message": "{\"name\": \"gerardo\", \"action\": \"vamos\"}"
 }</code></pre></div><div class="tab-pane" id="kafka_topics_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Publish in topic</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
   "result": {
     "statusCode": 200,
     "code": "COGNOS200",
-    "message": "Users validation resolved"
+    "message": "Successful publish in topic"
   },
   "data": {
-      "status": 1,
-      "userUuid": "f4081f92-742d-4505-80c1-1d9614c8bc55",
-      "message": "OK"
+      "timestamp": 1313216546543,
+      "topic": "uniqueId",
+      "partition": 1
     }
 }</code></pre><h2>HTTP status code <a href="http://httpstatus.es/500" target="_blank">500</a></h2><p>Internal server error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
   "result": {
@@ -198,4 +201,54 @@
     "message": "There was an internal problem handling your request"
   }
 }
-</code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#kafka">/kafka</a></li></ul></div></div></div></div></body></html>
+</code></pre></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="users" class="panel-title">/users</h3></div><div class="panel-body"><div class="top-resource-description"><p>General endpoint for publish in kafka topic</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_users_topics"><span class="parent">/users</span>/topics</a> <span class="methods"><a href="#users_topics_get"><span class="badge badge_get">get</span></a> <a href="#users_topics_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_users_topics" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#users_topics_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Get all topics</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#users_topics_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Publish in topic</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="users_topics_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/users</span>/topics</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get all topics</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users_topics_get_request" data-toggle="tab">Request</a></li><li><a href="#users_topics_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users_topics_get_request"><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>User authentication token</p><p><strong>Example</strong>:</p><pre>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IndpbGxpYW1zLmFndWlsZXJhQGJidmEuY29tIiw</pre></li></ul></div><div class="tab-pane" id="users_topics_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Topics successfully retrieved</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "result": {
+    "statusCode": 200,
+    "code": "COGNOS200",
+    "message": "Topics successfully retrieved"
+  },
+  "data": {
+      "topics": ["uniqueId", "hermes"]
+  }
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2><p>Bad request. Incorrect params</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "result": {
+    "code": "COGNOS400",
+    "message": "Bad request"
+  }
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><p>Invalid auth token</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "result": {
+    "statusCode": 401,
+    "code": "COGNOS401",
+    "message": "The authorization token is invalid"
+  }
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/500" target="_blank">500</a></h2><p>Internal error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "result": {
+    "code": "COGNOS500",
+    "message": "Internal error"
+  }
+}
+</code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="users_topics_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/users</span>/topics</h4></div><div class="modal-body"><div class="alert alert-info"><p>Publish in topic</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users_topics_post_request" data-toggle="tab">Request</a></li><li><a href="#users_topics_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users_topics_post_request"><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>User authentication token</p><p><strong>Example</strong>:</p><pre>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IndpbGxpYW1zLmFndWlsZXJhQGJidmEuY29tIiw</pre></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "topic": "uniqueId",
+  "message": "{\"name\": \"gerardo\", \"action\": \"vamos\"}"
+}</code></pre></div><div class="tab-pane" id="users_topics_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Publish in topic</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "result": {
+    "statusCode": 200,
+    "code": "COGNOS200",
+    "message": "Successful publish in topic"
+  },
+  "data": {
+      "timestamp": 1313216546543,
+      "topic": "uniqueId",
+      "partition": 1
+    }
+}</code></pre><h2>HTTP status code <a href="http://httpstatus.es/500" target="_blank">500</a></h2><p>Internal server error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "result": {
+    "statusCode": 500,
+    "code": "COGNOS500",
+    "message": "There was an internal problem handling your request"
+  }
+}
+</code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#kafka">/kafka</a></li><li><a href="#users">/users</a></li></ul></div></div></div></div></body></html>

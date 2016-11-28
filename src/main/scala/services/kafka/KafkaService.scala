@@ -36,6 +36,7 @@ object KafkaService extends Base {
       }
     } catch {
       case e: Exception => {
+        println(e.getMessage)
         Future.successful {
           Some(Result(500, "COGNOS500", "Internal error server"))
         }

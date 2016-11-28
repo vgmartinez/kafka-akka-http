@@ -19,11 +19,11 @@
           "result": {
             "statusCode": 200,
             "code": "COGNOS200",
-            "message": "Users validation resolved"
+            "message": "Successful publish in topic"
           },
           "data": {
-              "status": 1,
-              "userUuid": "f4081f92-742d-4505-80c1-1d9614c8bc55",
-              "message": "OK"
+              "timestamp": 1313216546543,
+              "topic": "uniqueId",
+              "partition": 1
             }
         }
