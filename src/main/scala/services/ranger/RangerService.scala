@@ -38,7 +38,6 @@ trait RangerService extends Base with JsonMappings {
         items.accesses foreach { permission =>
           permission.`type` match {
             case "publish" => isAuthorize = items.users.contains(userName)
-            case _ => isAuthorize = false
           }
         }
       }
