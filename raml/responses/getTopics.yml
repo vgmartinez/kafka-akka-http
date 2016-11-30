@@ -6,8 +6,12 @@
         {
           "result": {
             "statusCode": 200,
-            "code": "HERMESMSBACKOFFICE200",
-            "message": "Users successfully retrieved"
+            "code": "COGNOS200",
+            "message": "Topics successfully retrieved"
+          },
+          data: {
+            timestamp: 5465465432121,
+            topics: ["uniqueId", "hermes"]
           }
         }
 400:
@@ -17,7 +21,7 @@
       example: |
         {
           "result": {
-            "code": "KSTGEN400",
+            "code": "COGNOS400",
             "message": "Bad request"
           }
         }
@@ -29,7 +33,7 @@
         {
           "result": {
             "statusCode": 401,
-            "code": "HERMESMSBACKOFFICE401",
+            "code": "COGNOS401",
             "message": "The authorization token is invalid"
           }
         }
@@ -40,7 +44,7 @@
       example: |
         {
           "result": {
-            "code": "KSTGEN500",
+            "code": "COGNOS500",
             "message": "Internal error"
           }
         }

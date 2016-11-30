@@ -22,8 +22,8 @@
             "message": "Users validation resolved"
           },
           "data": {
-              "status": 1,
-              "userUuid": "f4081f92-742d-4505-80c1-1d9614c8bc55",
-              "message": "OK"
+              "timestamp": 5456465213131,
+              "topic": "uniqueId",
+              "partition": 1
             }
         }

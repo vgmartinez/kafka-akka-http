@@ -1,6 +1,6 @@
 version: "2"
 
-services:
+com.kst.services:
   api:
     command: "scala-2.11/kafkaRestApi-assembly-1.0.0.jar kst-cognosfera/kafka-rest/loc"
     ports:

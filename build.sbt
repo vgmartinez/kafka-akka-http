@@ -20,19 +20,27 @@ libraryDependencies ++= {
     "com.typesafe.akka"         %% "akka-http-experimental"               % akkaStreamVersion,
     "com.typesafe.akka"         %% "akka-http-core-experimental"          % akkaStreamVersion,
     "com.typesafe.akka"         %% "akka-http-spray-json-experimental"    % akkaStreamVersion,
-    "org.apache.kafka"          %% "kafka"                                % "0.10.1.0",
+    "org.apache.kafka"          % "kafka_2.11"                            % "0.10.1.0",
+    "io.confluent"              % "kafka-avro-serializer"                 % "3.0.0",
     "com.typesafe.slick"        %% "slick"                                % slickVersion,
     "com.typesafe.play"         %% "play-slick-evolutions"                % "2.0.2",
     "org.apache.hadoop"          % "hadoop-client"                        % "2.7.3",
+    "com.sksamuel.avro4s"        % "avro4s-core_2.11"                     % "1.6.2",
     "org.postgresql"             %  "postgresql"                          % "9.4-1201-jdbc41",
     "org.flywaydb"               %  "flyway-core"                         % "3.2.1",
-    "com.typesafe.akka"         %% "akka-testkit"                         % akkaVersion % "test",
-    "ru.yandex.qatools.embed"    % "postgresql-embedded"                  % "1.15" % "test",
-    "org.scalatest"             %% "scalatest"                            % scalaTestVersion % "test",
-    "org.scalamock"             %% "scalamock-scalatest-support"          % scalaMockVersion % "test",
-    "com.typesafe.akka"         %% "akka-http-testkit-experimental"       % akkaStreamVersion % "test"
+    "com.typesafe.akka"         %% "akka-testkit"                         % akkaVersion       % "test",
+    "ru.yandex.qatools.embed"    % "postgresql-embedded"                  % "1.15"            % "test",
+    "org.scalatest"             %% "scalatest"                            % scalaTestVersion  % "test",
+    "org.scalamock"             %% "scalamock-scalatest-support"          % scalaMockVersion  % "test",
+    "com.typesafe.akka"         %% "akka-http-testkit-experimental"       % akkaStreamVersion % "test",
+    "net.manub"                 %% "scalatest-embedded-kafka"             % "0.10.0"
   )
 }
+
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("public"),
+  "Confluent Maven Repo" at "http://packages.confluent.io/maven/"
+)
 
 assemblyExcludedJars in assembly <<= (fullClasspath in assembly) map { cp =>
   val excludes = Set(
