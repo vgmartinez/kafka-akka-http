@@ -1,8 +1,7 @@
-.tmp
-.gitreview
 .idea/*
 *.iml
 target/
+logs/
+raml/api.html
 project/target/*
 project/project/*
-sbt-0.13.13.deb
