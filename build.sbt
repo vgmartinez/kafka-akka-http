@@ -10,9 +10,17 @@ scalaVersion := "2.11.7"
 libraryDependencies ++= {
   val akkaStreamVersion = "2.0.5"
   val akkaVersion = "2.4.11"
+  val kafkaVersion = "0.10.1.0"
   val scalaTestVersion = "3.0.0"
   val scalaMockVersion = "3.3.0"
   val slickVersion = "3.1.1"
+  val playSlickVersion = "2.0.2"
+  val hadoopVersion = "2.7.3"
+  val embeddedKafkaVersion = "0.10.0"
+  val postgresVersion = "1.15"
+  val flywayVersion = "3.2.1"
+  val postgresJDBC = "9.4-1201-jdbc41"
+  val avro4sVersion = "1.6.2"
 
   Seq(
     "com.typesafe.akka"         %% "akka-actor"                           % akkaVersion,
@@ -20,27 +28,21 @@ libraryDependencies ++= {
     "com.typesafe.akka"         %% "akka-http-experimental"               % akkaStreamVersion,
     "com.typesafe.akka"         %% "akka-http-core-experimental"          % akkaStreamVersion,
     "com.typesafe.akka"         %% "akka-http-spray-json-experimental"    % akkaStreamVersion,
-    "org.apache.kafka"          % "kafka_2.11"                            % "0.10.1.0",
-    "io.confluent"              % "kafka-avro-serializer"                 % "3.0.0",
+    "org.apache.kafka"          %% "kafka"                                % kafkaVersion,
     "com.typesafe.slick"        %% "slick"                                % slickVersion,
-    "com.typesafe.play"         %% "play-slick-evolutions"                % "2.0.2",
-    "org.apache.hadoop"          % "hadoop-client"                        % "2.7.3",
-    "com.sksamuel.avro4s"        % "avro4s-core_2.11"                     % "1.6.2",
-    "org.postgresql"             %  "postgresql"                          % "9.4-1201-jdbc41",
-    "org.flywaydb"               %  "flyway-core"                         % "3.2.1",
+    "com.typesafe.play"         %% "play-slick-evolutions"                % playSlickVersion,
+    "org.apache.hadoop"          % "hadoop-client"                        % hadoopVersion,
+    "com.sksamuel.avro4s"        % "avro4s-core_2.11"                     % avro4sVersion,
+    "org.postgresql"             %  "postgresql"                          % postgresJDBC,
+    "org.flywaydb"               %  "flyway-core"                         % flywayVersion,
     "com.typesafe.akka"         %% "akka-testkit"                         % akkaVersion       % "test",
-    "ru.yandex.qatools.embed"    % "postgresql-embedded"                  % "1.15"            % "test",
+    "ru.yandex.qatools.embed"    % "postgresql-embedded"                  % postgresVersion   % "test",
     "org.scalatest"             %% "scalatest"                            % scalaTestVersion  % "test",
     "org.scalamock"             %% "scalamock-scalatest-support"          % scalaMockVersion  % "test",
     "com.typesafe.akka"         %% "akka-http-testkit-experimental"       % akkaStreamVersion % "test",
-    "net.manub"                 %% "scalatest-embedded-kafka"             % "0.10.0"
+    "net.manub"                 %% "scalatest-embedded-kafka"             % embeddedKafkaVersion
   )
 }
-
-resolvers ++= Seq(
-  Resolver.sonatypeRepo("public"),
-  "Confluent Maven Repo" at "http://packages.confluent.io/maven/"
-)
 
 assemblyExcludedJars in assembly <<= (fullClasspath in assembly) map { cp =>
   val excludes = Set(

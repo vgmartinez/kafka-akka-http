@@ -1,14 +1,18 @@
 package com.kst.services.kafkaService
 
 import java.io.ByteArrayOutputStream
+
 import com.kst.services.Base
 import java.util.Properties
+
 import com.kst.models._
 import com.sksamuel.avro4s.{AvroInputStream, AvroOutputStream}
 import com.sun.xml.internal.messaging.saaj.util.ByteInputStream
 import net.manub.embeddedkafka.KafkaUnavailableException
+import org.apache.avro.AvroTypeException
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -21,28 +25,34 @@ object KafkaService extends Base {
   props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer")
   props.put("key.deserializer","org.apache.kafka.common.serialization.StringDeserializer")
   props.put("value.deserializer","org.apache.kafka.common.serialization.StringDeserializer")
-  //props.put("security.protocol", "PLAINTEXTSASL")
-  //props.put("sasl.kerberos.service.name", "kafka")
+  props.put("security.protocol", s"$kafkaSecurityProtocol")
+  props.put("sasl.kerberos.service.name", "kafka")
 
   val producer = new KafkaProducer[String, Array[Byte]](props)
   val consumer = new KafkaConsumer[String, String](props)
 
-  def serializeToAvro(schemaName: String, message: String): Array[Byte] = {
-    val in = new ByteInputStream(message.getBytes("UTF-8"), message.length)
+  def serializeInAvro(schemaName: String, message: String): Array[Byte] = {
+    try {
+      val in = new ByteInputStream(message.getBytes("UTF-8"), message.length)
 
-    val input = AvroInputStream.json[LendingClub](in)
-    val lendingClub = input.singleEntity.get
+      val input = AvroInputStream.json[LendingClub](in)
+      val lendingClub = input.singleEntity.get
 
-    val output = new ByteArrayOutputStream
-    val avro = AvroOutputStream.data[LendingClub](output)
-    avro.write(lendingClub)
-    avro.close()
-    output.toByteArray
+      val output = new ByteArrayOutputStream
+      val avro = AvroOutputStream.data[LendingClub](output)
+      avro.write(lendingClub)
+      avro.close()
+      output.toByteArray
+    } catch {
+      case e: Exception => {
+        throw new AvroTypeException(e.getMessage)
+      }
+    }
   }
 
   def publish(entityMessage: MessageEntity): Future[Option[ResultMetadata]] = {
     val topicName = entityMessage.topic
-    val message = serializeToAvro(entityMessage.schemaName, entityMessage.message)
+    val message = serializeInAvro(entityMessage.schemaName, entityMessage.message)
     val response = publishInTopic(topicName, message)
     closeProducer()
     response

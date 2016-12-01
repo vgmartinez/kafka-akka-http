@@ -1,13 +1,15 @@
-package com.kst.services
+package com.kst.services.kafkaService
 
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import com.kst.models.{MessageEntity, ResultMetadata, ResultTopics}
-import net.manub.embeddedkafka.{EmbeddedKafka, EmbeddedKafkaConfig, KafkaUnavailableException}
-import org.scalatest.{Matchers, WordSpec}
+import com.kst.services.Base
 import com.kst.services.kafkaService.KafkaService._
 import kafka.admin.AdminUtils
 import kafka.utils.ZkUtils
-import org.apache.kafka.common.serialization.{BytesSerializer, StringSerializer}
+import net.manub.embeddedkafka.{EmbeddedKafka, EmbeddedKafkaConfig, KafkaUnavailableException}
+import org.apache.avro.AvroTypeException
+import org.apache.kafka.common.serialization.BytesSerializer
+import org.scalatest.{Matchers, WordSpec}
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -17,23 +19,40 @@ import scala.concurrent.{Await, Future}
   */
 class KafkaServiceSpec extends WordSpec with Matchers with ScalatestRouteTest with Base with EmbeddedKafka {
   val lendingClub =
-    """
-      |{
-      |	"id": 1,
-      |	"loan_amnt": 1,
-      |	"funded_amnt": 2500.0,
-      |	"grade": "E",
-      |	"emp_length": "10+ years",
-      |	"home_ownership": "RENT",
-      |	"annual_inc": 1,
-      |	"loan_status": "Fully Paid",
-      |	"purpose": "small_business",
-      |	"zip_code": "606xx",
-      |	"addr_state": "CA",
-      |	"total_pymnt_inv": 12226.3
-      |}
-    """.stripMargin
+      """
+        |{
+        |	"id": 1,
+        |	"loan_amnt": 1,
+        |	"funded_amnt": 2500.0,
+        |	"grade": "E",
+        |	"emp_length": "10+ years",
+        |	"home_ownership": "RENT",
+        |	"annual_inc": 1,
+        |	"loan_status": "Fully Paid",
+        |	"purpose": "small_business",
+        |	"zip_code": "606xx",
+        |	"addr_state": "CA",
+        |	"total_pymnt_inv": 12226.3
+        |}
+      """.stripMargin
 
+  val lendingClubBad =
+      """
+        |{
+        |	"id": 1,
+        |	"loan_amnt": "1",
+        |	"funded_amnt": 2500.0,
+        |	"grade": "E",
+        |	"emp_length": "10+ years",
+        |	"home_ownership": "RENT",
+        |	"annual_inc": 1,
+        |	"loan_status": "Fully Paid",
+        |	"purpose": "small_business",
+        |	"zip_code": "606xx",
+        |	"addr_state": "CA",
+        |	"total_pymnt_inv": 12226.3
+        |}
+      """.stripMargin
   override def afterAll(): Unit = {
     closeProducer()
     closeConsumer()
@@ -47,6 +66,16 @@ class KafkaServiceSpec extends WordSpec with Matchers with ScalatestRouteTest wi
     "publish event in topic" in {
       withRunningKafka {
         response = publish(messageToPublish)
+      }
+    }
+
+    "publish message with bad schema format" in {
+      withRunningKafka {
+        a[AvroTypeException] shouldBe thrownBy {
+          implicit val serializer = new BytesSerializer
+          val messageToPublish = MessageEntity(topic, "LendingClub", lendingClubBad)
+          publish(messageToPublish)
+        }
       }
     }
 

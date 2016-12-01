@@ -12,7 +12,7 @@ trait KafkaRoute extends JsonMappings with SecurityDirectives with RangerService
   val kafkaApi = pathPrefix("kafka") {
     pathPrefix("topics") {
       pathEndOrSingleSlash {
-        authenticate { loggedUser =>
+        //authenticate { loggedUser =>
           get {
             complete {
               getTopics.map(_.toJson)
@@ -20,12 +20,12 @@ trait KafkaRoute extends JsonMappings with SecurityDirectives with RangerService
           }~
           post {
             entity(as[MessageEntity]) { messageForPublish =>
-              authorize(isAuthorizeForPublish(loggedUser.username, messageForPublish.topic)) {
+              authorize(isAuthorizeForPublish("kafka", messageForPublish.topic)) {
                 complete(OK -> publish(messageForPublish).map(_.toJson))
               }
             }
           }
-        }
+        //}
       }
     }
   }

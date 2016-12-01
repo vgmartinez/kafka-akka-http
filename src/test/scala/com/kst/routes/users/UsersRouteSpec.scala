@@ -7,9 +7,11 @@ import com.kst.models.UserEntity
 import org.scalatest.concurrent.ScalaFutures
 import com.kst.services.BaseSpec
 import com.kst.services.users.UsersService._
+import org.scalatest.Ignore
 
 import scala.util.Random
 
+@Ignore
 class UsersRouteSpec extends BaseSpec with ScalaFutures{
   "Users service" should {
 

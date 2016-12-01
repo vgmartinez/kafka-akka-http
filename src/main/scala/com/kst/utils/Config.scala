@@ -18,6 +18,7 @@ trait Config {
 
   val kafkaHost = kafkaConfig.getString("default_host")
   val kafkaPort = kafkaConfig.getInt("default_port")
+  val kafkaSecurityProtocol = kafkaConfig.getString("security_protocol")
 
   val rangerHost = rangerConfig.getString("default_host")
   val rangerPort = rangerConfig.getInt("default_port")
@@ -34,6 +35,7 @@ trait Config {
 
   val kafkaHost = System.getenv("COGNOS_KAFKA_HOST")
   val kafkaPort = System.getenv("COGNOS_KAFKA_PORT").asInstanceOf[Int]
+  val kafkaSecurityProtocol = System.getenv("COGNOS_KAFKA_SECURITY_PROTOCOL")
 
   val rangerHost = System.getenv("COGNOS_RANGER_HOST")
   val rangerPort = System.getenv("COGNOS_RANGER_PORT").asInstanceOf[Int]

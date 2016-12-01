@@ -4,10 +4,12 @@ import akka.http.scaladsl.model.{HttpEntity, MediaTypes, StatusCodes}
 import com.kst.services.BaseSpec
 import spray.json._
 import com.kst.models.{TokenEntity, UserEntity}
+import org.scalatest.Ignore
 
 /**
   * Created by victorgarcia on 13/10/16.
   */
+@Ignore
 class AuthRouteSpec extends BaseSpec {
 
   "Auth service" should {
