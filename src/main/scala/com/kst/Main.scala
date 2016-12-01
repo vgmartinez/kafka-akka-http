@@ -14,7 +14,7 @@ object Main extends App with Config with MigrationConfig with Routes{
 
   val log: LoggingAdapter = Logging(system, getClass)
 
-  migrate()
+  //migrate()
 
   Http().bindAndHandle(routes, interface = httpInterface, port = httpPort)
 }

@@ -12,7 +12,6 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 import scala.util.Random
 
-@Ignore
 trait BaseSpec extends WordSpec with Matchers with ScalatestRouteTest with Routes with Base {
   protected val log: LoggingAdapter = NoLogging
   dbProcess.getProcessId

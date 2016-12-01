@@ -12,7 +12,6 @@ trait DatabaseConfig extends Config {
   hikariConfig.setMaxLifetime(4)
   hikariConfig.setIdleTimeout(4)
 
-  println()
   private val dataSource = new HikariDataSource(hikariConfig)
 
   val driver = slick.driver.PostgresDriver

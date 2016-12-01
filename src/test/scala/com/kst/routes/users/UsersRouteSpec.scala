@@ -11,7 +11,6 @@ import org.scalatest.Ignore
 
 import scala.util.Random
 
-@Ignore
 class UsersRouteSpec extends BaseSpec with ScalaFutures{
   "Users service" should {
 

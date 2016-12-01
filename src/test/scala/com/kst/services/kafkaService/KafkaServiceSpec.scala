@@ -2,7 +2,6 @@ package com.kst.services.kafkaService
 
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import com.kst.models.{MessageEntity, ResultMetadata, ResultTopics}
-import com.kst.services.Base
 import com.kst.services.kafkaService.KafkaService._
 import kafka.admin.AdminUtils
 import kafka.utils.ZkUtils
@@ -17,7 +16,7 @@ import scala.concurrent.{Await, Future}
 /**
   * Created by victorgarcia on 29/11/16.
   */
-class KafkaServiceSpec extends WordSpec with Matchers with ScalatestRouteTest with Base with EmbeddedKafka {
+class KafkaServiceSpec extends WordSpec with Matchers with ScalatestRouteTest with EmbeddedKafka {
   val lendingClub =
       """
         |{

@@ -8,7 +8,7 @@ import com.kst.services.kafkaService.KafkaService._
 import com.kst.services.ranger.RangerService
 import spray.json._
 
-trait KafkaRoute extends JsonMappings with SecurityDirectives with RangerService {
+trait KafkaRoute extends JsonMappings with RangerService {
   val kafkaApi = pathPrefix("kafka") {
     pathPrefix("topics") {
       pathEndOrSingleSlash {

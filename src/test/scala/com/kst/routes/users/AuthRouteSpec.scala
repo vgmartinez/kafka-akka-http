@@ -9,7 +9,7 @@ import org.scalatest.Ignore
 /**
   * Created by victorgarcia on 13/10/16.
   */
-@Ignore
+
 class AuthRouteSpec extends BaseSpec {
 
   "Auth service" should {
