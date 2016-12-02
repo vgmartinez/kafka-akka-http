@@ -25,7 +25,7 @@ trait RangerService extends Config with JsonMappings {
   implicit val materializer: Materializer
 
   lazy val rangerConnectionFlow: Flow[HttpRequest, HttpResponse, Any] =
-    Http().outgoingConnection(rangerHost, rangerPort)
+    Http().outgoingConnection(rangerHost, 6080)
 
   def rangerRequest(request: HttpRequest): Future[HttpResponse] =
     Source.single(request).via(rangerConnectionFlow).runWith(Sink.head)

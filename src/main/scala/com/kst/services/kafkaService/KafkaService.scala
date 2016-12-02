@@ -15,7 +15,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object KafkaService extends Config {
   val props = new Properties()
-  props.put("bootstrap.servers", s"$kafkaHost:$kafkaPort")
+  props.put("bootstrap.servers", kafkaHost + ":" + kafkaPort)
   props.put("acks", "all")
   props.put("retries", "0")
   props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
