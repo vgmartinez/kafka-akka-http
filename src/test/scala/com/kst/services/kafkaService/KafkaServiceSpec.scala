@@ -8,7 +8,7 @@ import kafka.utils.ZkUtils
 import net.manub.embeddedkafka.{EmbeddedKafka, EmbeddedKafkaConfig, KafkaUnavailableException}
 import org.apache.avro.AvroTypeException
 import org.apache.kafka.common.serialization.BytesSerializer
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Ignore, Matchers, WordSpec}
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -16,6 +16,8 @@ import scala.concurrent.{Await, Future}
 /**
   * Created by victorgarcia on 29/11/16.
   */
+
+@Ignore
 class KafkaServiceSpec extends WordSpec with Matchers with ScalatestRouteTest with EmbeddedKafka {
   val lendingClub =
       """

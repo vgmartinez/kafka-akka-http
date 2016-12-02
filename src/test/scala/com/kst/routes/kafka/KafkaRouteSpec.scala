@@ -5,8 +5,9 @@ import akka.http.scaladsl.testkit.ScalatestRouteTest
 import com.kst.models.ResultTopics
 import com.kst.routes.Routes
 import net.manub.embeddedkafka.EmbeddedKafka
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{Ignore, Matchers, WordSpec}
 
+@Ignore
 class KafkaRouteSpec extends WordSpec with Routes with Matchers with ScalatestRouteTest with EmbeddedKafka {
 
   "check for response in list topics" should {
