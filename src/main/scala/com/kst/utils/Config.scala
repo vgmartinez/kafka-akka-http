@@ -27,7 +27,7 @@ trait Config {
   val rangerPass = rangerConfig.getString("default_pass")
 */
   val httpInterface = System.getenv("COGNOS_HTTP_INTERFACE")
-  val httpPort = System.getenv("COGNOS_HTTP_PORT").asInstanceOf[Int]
+  val httpPort = System.getenv("COGNOS_HTTP_PORT")
 
   val databaseUrl = System.getenv("COGNOS_DATABASE_URL")
   val databaseUser = System.getenv("COGNOS_DATABASE_USER")

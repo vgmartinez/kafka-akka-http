@@ -16,5 +16,5 @@ object Main extends App with Config with MigrationConfig with Routes{
 
   //migrate()
 
-  Http().bindAndHandle(routes, interface = httpInterface, port = httpPort)
+  Http().bindAndHandle(routes, interface = httpInterface, port = httpPort.toInt)
 }
