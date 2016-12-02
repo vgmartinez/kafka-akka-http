@@ -7,4 +7,5 @@ case class Metadata(timestamp: Long, topic: String, partition: Int)
 
 case class Topics(timestamp: Long, topics: List[String])
 
-case class Result(statusCode: Int, code: String, message: String, data: Option[Any] = None)
+case class ResultTopics(statusCode: Int, code: String, message: String, data: Option[Topics] = None)
+case class ResultMetadata(statusCode: Int, code: String, message: String, data: Option[Metadata] = None)
