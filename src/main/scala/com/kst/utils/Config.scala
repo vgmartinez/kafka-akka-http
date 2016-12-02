@@ -3,6 +3,7 @@ package com.kst.utils
 import com.typesafe.config.ConfigFactory
 
 trait Config {
+  /*
   private val config = ConfigFactory.load()
   private val httpConfig = config.getConfig("http")
   private val databaseConfig = config.getConfig("database")
@@ -24,8 +25,8 @@ trait Config {
   val rangerPort = rangerConfig.getInt("default_port")
   val rangerUser = rangerConfig.getString("default_user")
   val rangerPass = rangerConfig.getString("default_pass")
-
-  /*val httpInterface = System.getenv("COGNOS_HTTP_INTERFACE")
+*/
+  val httpInterface = System.getenv("COGNOS_HTTP_INTERFACE")
   val httpPort = System.getenv("COGNOS_HTTP_PORT").asInstanceOf[Int]
 
   val databaseUrl = System.getenv("COGNOS_DATABASE_URL")
@@ -40,6 +41,6 @@ trait Config {
   val rangerHost = System.getenv("COGNOS_RANGER_HOST")
   val rangerPort = System.getenv("COGNOS_RANGER_PORT").asInstanceOf[Int]
   val rangerUser = System.getenv("COGNOS_RANGER_USER")
-  val rangerPass = System.getenv("COGNOS_RANGER_PASSWORD")*/
+  val rangerPass = System.getenv("COGNOS_RANGER_PASSWORD")
 
 }

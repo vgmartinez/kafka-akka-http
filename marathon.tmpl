@@ -3,7 +3,7 @@
   "apps": [{
     "id": "kafka-rest",
     "instances": {{key "kst-cognosfera/kafka-rest/REPLACE_FOR_MARATHON_ENV/marathon/INSTANCES"}},
-    "args": ["kst-cognosfera/kafka-rest/REPLACE_FOR_MARATHON_ENV"],
+    "args": ["scala-2.11/kafkaRestApi-assembly-1.0.0.jar", "kst-cognosfera/kafka-rest/REPLACE_FOR_MARATHON_ENV"],
     "cpus": {{key "kst-cognosfera/kafka-rest/REPLACE_FOR_MARATHON_ENV/marathon/CPUS"}},
     "mem": {{key "kst-cognosfera/kafka-rest/REPLACE_FOR_MARATHON_ENV/marathon/MEM"}},
     "dependencies": [],
