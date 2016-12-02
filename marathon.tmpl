@@ -1,0 +1,45 @@
+{
+  "id": "/cognosfera/REPLACE_FOR_MARATHON_ENV",
+  "apps": [{
+    "id": "kafka-rest",
+    "instances": {{key "kst-cognosfera/kafka-rest/REPLACE_FOR_MARATHON_ENV/marathon/INSTANCES"}},
+    "args": ["kst-cognosfera/kafka-rest/REPLACE_FOR_MARATHON_ENV"],
+    "cpus": {{key "kst-cognosfera/kafka-rest/REPLACE_FOR_MARATHON_ENV/marathon/CPUS"}},
+    "mem": {{key "kst-cognosfera/kafka-rest/REPLACE_FOR_MARATHON_ENV/marathon/MEM"}},
+    "dependencies": [],
+    "container": {
+      "type": "DOCKER",
+      "docker": {
+        "image": "REPLACE_FOR_REGISTRY/kst/cognosfera/demo-kafka-api:0.0.1",
+        "forcePullImage": true,
+        "network": "BRIDGE",
+        "portMappings": [{
+          "containerPort": 9002,
+          "hostPort": 0,
+          "protocol": "tcp"
+        }]
+      }
+    },
+    "labels": {
+      "project": "cognosfera",
+      "subproject": "demo-kafka-api",
+      "tags": "cognosfera,demo-kafka-api",
+      "elb": "true"
+    },
+    "constraints": [
+      ["hostname", "UNIQUE"]
+    ],
+    "env": {
+      "CONSUL": "consul.service.consul:8500"
+    },
+    "healthChecks": [{
+      "type": "http",
+      "protocol": "HTTP",
+      "portIndex": 0,
+      "gracePeriodSeconds": 30,
+      "intervalSeconds": 20,
+      "maxConsecutiveFailures": 5,
+      "path": "/v1/kafka"
+    }]
+  }]
+}
