@@ -1,21 +1,36 @@
 package com.kst.routes.kafka
 
-import akka.http.scaladsl.model.headers.RawHeader
+import akka.http.scaladsl.model.{HttpEntity, MediaTypes}
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import com.kst.models.ResultTopics
 import com.kst.routes.Routes
-import com.kst.services.kafkaService.KafkaService._
 import net.manub.embeddedkafka.EmbeddedKafka
-import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{Matchers, WordSpec}
 
-class KafkaRouteSpec extends WordSpec with ScalaFutures with Matchers with ScalatestRouteTest with Routes with EmbeddedKafka {
+class KafkaRouteSpec extends WordSpec with Routes with Matchers with ScalatestRouteTest with EmbeddedKafka {
 
-  "Kafka service" should {
-    "retrieve users list" in {
+  "check for response in list topics" should {
+    val topic = "test_topic"
+    "get topics in response" in {
       withRunningKafka {
+        createCustomTopic(topic, Map("cleanup.policy" -> "compact"))
         Get("/kafka/topics") ~> kafkaApi ~> check {
-          responseAs[ResultTopics].data.get.topics.isEmpty should be(true)
+          responseAs[ResultTopics].data.get.topics.headOption.get should be(topic)
+        }
+      }
+    }
+  }
+
+  "publish funtionality" should {
+    val topic = "test_topic"
+    "get response for publish message in topic" in {
+      withRunningKafka {
+        createCustomTopic(topic, Map("cleanup.policy" -> "compact"))
+
+        val requestEntity = HttpEntity(MediaTypes.`application/json`, s"""{"topic": "$topic", "schema": "LendingClub", "message":  "{\"name\": \"gerardo\", \"action\": \"vamos\"}"}""")
+
+        Post("/kafka/topics") ~> kafkaApi ~> check {
+          responseAs[ResultTopics].data.get.topics.headOption.get should be(topic)
         }
       }
     }

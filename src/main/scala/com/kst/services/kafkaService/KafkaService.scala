@@ -1,22 +1,19 @@
 package com.kst.services.kafkaService
 
 import java.io.ByteArrayOutputStream
-
-import com.kst.services.Base
 import java.util.Properties
-
 import com.kst.models._
+import com.kst.utils.Config
 import com.sksamuel.avro4s.{AvroInputStream, AvroOutputStream}
 import com.sun.xml.internal.messaging.saaj.util.ByteInputStream
 import net.manub.embeddedkafka.KafkaUnavailableException
 import org.apache.avro.AvroTypeException
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
-
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object KafkaService extends Base {
+object KafkaService extends Config {
   val props = new Properties()
   props.put("bootstrap.servers", s"$kafkaHost:$kafkaPort")
   props.put("acks", "all")
@@ -28,8 +25,8 @@ object KafkaService extends Base {
   props.put("security.protocol", s"$kafkaSecurityProtocol")
   props.put("sasl.kerberos.service.name", "kafka")
 
-  val producer = new KafkaProducer[String, Array[Byte]](props)
-  val consumer = new KafkaConsumer[String, String](props)
+  var consumer: KafkaConsumer[String, String] = null
+  var producer: KafkaProducer[String, Array[Byte]] = null
 
   def serializeInAvro(schemaName: String, message: String): Array[Byte] = {
     try {
@@ -59,6 +56,7 @@ object KafkaService extends Base {
   }
 
   def publishInTopic(topicName: String, message: Array[Byte]): Future[Option[ResultMetadata]] = {
+    producer = new KafkaProducer[String, Array[Byte]](props)
     val record = new ProducerRecord(topicName, "key", message)
     try {
       val producerResponse = producer.send(record).get
@@ -83,6 +81,8 @@ object KafkaService extends Base {
   }
 
   def fetchTopics: Future[Option[ResultTopics]] = {
+    consumer = new KafkaConsumer[String, String](props)
+
     try {
       val topics = consumer.listTopics()
       Future {
@@ -92,6 +92,7 @@ object KafkaService extends Base {
       }
     } catch {
       case e: Exception => {
+        e.printStackTrace()
         Future.successful {
           Some(ResultTopics(500, "COGNOS500", "Internal error server"))
         }

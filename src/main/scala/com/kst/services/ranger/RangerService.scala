@@ -1,7 +1,6 @@
 package com.kst.services.ranger
 
 import java.io.IOException
-
 import akka.actor.ActorSystem
 import akka.http.javadsl.model.headers.Authorization
 import akka.http.scaladsl.Http
@@ -13,9 +12,7 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import com.kst.mappings.JsonMappings
 import com.kst.models.PolicyEntity
-import com.kst.services.Base
 import com.kst.utils.Config
-
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContextExecutor, Future}
 

@@ -15,12 +15,3 @@ com.kst.services:
       DOMAIN_REALM: node.dc1.consul
       KDC_ADDRESS: sandbox.hortonworks.com
       KDC_PORT: 88
-    depends_on:
-      - postgres
-
-  postgres:
-    container_name: congnosfera_postgres
-    image: postgres
-    environment:
-      POSTGRES_PASSWORD: postgres
-

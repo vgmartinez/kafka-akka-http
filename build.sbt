@@ -44,6 +44,8 @@ libraryDependencies ++= {
   )
 }
 
+parallelExecution in Test := false
+
 assemblyExcludedJars in assembly <<= (fullClasspath in assembly) map { cp =>
   val excludes = Set(
     "commons-logging-1.1.3.jar",

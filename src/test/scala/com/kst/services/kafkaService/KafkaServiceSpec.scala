@@ -52,6 +52,7 @@ class KafkaServiceSpec extends WordSpec with Matchers with ScalatestRouteTest wi
         |	"total_pymnt_inv": 12226.3
         |}
       """.stripMargin
+
   override def afterAll(): Unit = {
     closeProducer()
     closeConsumer()
