@@ -28,7 +28,8 @@ class KafkaRouteSpec extends WordSpec with Routes with Matchers with ScalatestRo
       withRunningKafka {
         createCustomTopic(topic, Map("cleanup.policy" -> "compact"))
 
-        val requestEntity = HttpEntity(MediaTypes.`application/json`, s"""{"topic": "$topic", "schema": "LendingClub", "message":  "{\"name\": \"gerardo\", \"action\": \"vamos\"}"}""")
+        val requestEntity = HttpEntity(MediaTypes.`application/json`,
+          s"""{"topic": "$topic", "schema": "LendingClub", "message":  "{\"name\": \"gerardo\", \"action\": \"vamos\"}"}""")
 
         Post("/kafka/topics") ~> kafkaApi ~> check {
           responseAs[ResultTopics].data.get.topics.headOption.get should be(topic)
