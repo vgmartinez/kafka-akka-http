@@ -3,44 +3,50 @@ package com.kst.utils
 import com.typesafe.config.ConfigFactory
 
 trait Config {
-  /*
-  private val config = ConfigFactory.load()
-  private val httpConfig = config.getConfig("http")
-  private val databaseConfig = config.getConfig("database")
-  private val kafkaConfig = config.getConfig("kafka")
-  private val rangerConfig = config.getConfig("ranger")
+  var httpInterface = ""
+  var httpPort = 0
+  var kafkaHost = ""
+  var kafkaPort = 0
+  var kafkaSecurityProtocol = ""
+  var rangerHost = ""
+  var rangerPort = 0
+  var rangerUser = ""
+  var rangerPass = ""
+  var rangerRepository = ""
 
-  val httpInterface = httpConfig.getString("interface")
-  val httpPort = httpConfig.getInt("port")
+  private val config = ConfigFactory.load("application.conf")
+  if (!config.isEmpty) {
+    // leyendo las variables desde fichero
+    val httpConfig = config.getConfig("http")
+    val kafkaConfig = config.getConfig("kafka")
+    val rangerConfig = config.getConfig("ranger")
 
-  val databaseUrl = databaseConfig.getString("url")
-  val databaseUser = databaseConfig.getString("user")
-  val databasePassword = databaseConfig.getString("password")
+    httpInterface = httpConfig.getString("interface")
+    httpPort = httpConfig.getInt("port")
+    kafkaHost = kafkaConfig.getString("default_host")
+    kafkaPort = kafkaConfig.getInt("default_port")
+    kafkaSecurityProtocol = kafkaConfig.getString("security_protocol")
+    rangerHost = rangerConfig.getString("default_host")
+    rangerPort = rangerConfig.getInt("default_port")
+    rangerUser = rangerConfig.getString("default_user")
+    rangerPass = rangerConfig.getString("default_pass")
+    rangerRepository = rangerConfig.getString("default_repository")
+  } else {
+    // leyendo las variables desde consul
+    System.setProperty("java.security.auth.login.config", "/usr/src/app/kafka_jaas.conf")
+    System.setProperty("javax.security.auth.useSubjectCredsOnly", "false")
+    System.setProperty("sun.security.krb5.debug", "true")
+    System.setProperty("javax.net.debug", "all")
 
-  val kafkaHost = kafkaConfig.getString("default_host")
-  val kafkaPort = kafkaConfig.getInt("default_port")
-  val kafkaSecurityProtocol = kafkaConfig.getString("security_protocol")
-
-  val rangerHost = rangerConfig.getString("default_host")
-  val rangerPort = rangerConfig.getInt("default_port")
-  val rangerUser = rangerConfig.getString("default_user")
-  val rangerPass = rangerConfig.getString("default_pass")
-*/
-  val httpInterface = System.getenv("COGNOS_HTTP_INTERFACE")
-  val httpPort = System.getenv("COGNOS_HTTP_PORT")
-
-  val databaseUrl = System.getenv("COGNOS_DATABASE_URL")
-  val databaseUser = System.getenv("COGNOS_DATABASE_USER")
-  val databasePassword = System.getenv("COGNOS_DATABASE_PASSWORD")
-  val databaseDriver = System.getenv("COGNOS_DATABASE_DRIVER")
-
-  val kafkaHost = System.getenv("COGNOS_KAFKA_HOST")
-  val kafkaPort = System.getenv("COGNOS_KAFKA_PORT")
-  val kafkaSecurityProtocol = System.getenv("COGNOS_KAFKA_SECURITY_PROTOCOL")
-
-  val rangerHost = System.getenv("COGNOS_RANGER_HOST")
-  val rangerPort = System.getenv("COGNOS_RANGER_PORT")
-  val rangerUser = System.getenv("COGNOS_RANGER_USER")
-  val rangerPass = System.getenv("COGNOS_RANGER_PASSWORD")
-
+    httpInterface = System.getenv("COGNOS_HTTP_INTERFACE")
+    httpPort = System.getenv("COGNOS_HTTP_PORT").toInt
+    kafkaHost = System.getenv("COGNOS_KAFKA_HOST")
+    kafkaPort = System.getenv("COGNOS_KAFKA_PORT").toInt
+    kafkaSecurityProtocol = System.getenv("COGNOS_KAFKA_SECURITY_PROTOCOL")
+    rangerHost = System.getenv("COGNOS_RANGER_HOST")
+    rangerPort = System.getenv("COGNOS_RANGER_PORT").toInt
+    rangerUser = System.getenv("COGNOS_RANGER_USER")
+    rangerPass = System.getenv("COGNOS_RANGER_PASSWORD")
+    rangerRepository = System.getenv("COGNOS_RANGER_REPOSITORY")
+  }
 }

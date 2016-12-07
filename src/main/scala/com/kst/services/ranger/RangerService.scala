@@ -1,6 +1,7 @@
 package com.kst.services.ranger
 
 import java.io.IOException
+
 import akka.actor.ActorSystem
 import akka.http.javadsl.model.headers.Authorization
 import akka.http.scaladsl.Http
@@ -13,13 +14,14 @@ import akka.stream.scaladsl.{Flow, Sink, Source}
 import com.kst.mappings.JsonMappings
 import com.kst.models.PolicyEntity
 import com.kst.utils.Config
+
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContextExecutor, Future}
 
 /**
   * Created by victorgarcia on 21/11/16.
   */
-trait RangerService extends Config with JsonMappings {
+trait RangerService extends JsonMappings with Config {
   implicit val system: ActorSystem
   implicit def executor: ExecutionContextExecutor
   implicit val materializer: Materializer
@@ -47,7 +49,7 @@ trait RangerService extends Config with JsonMappings {
   }
 
   def fetchPublishPolicy(topicName: String): Future[PolicyEntity] = {
-    rangerRequest(RequestBuilding.Get(s"/service/public/v2/api/service/Sandbox-kafka/policy/$topicName")
+    rangerRequest(RequestBuilding.Get(s"/service/public/v2/api/service/$rangerRepository/policy/$topicName")
       .addHeader(Authorization.basic(rangerUser, rangerPass))).flatMap { response =>
       response.status match {
         case OK =>

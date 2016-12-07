@@ -16,8 +16,6 @@ import scala.concurrent.{Await, Future}
 /**
   * Created by victorgarcia on 29/11/16.
   */
-
-@Ignore
 class KafkaServiceSpec extends WordSpec with Matchers with ScalatestRouteTest with EmbeddedKafka {
   val lendingClub =
       """
@@ -108,6 +106,7 @@ class KafkaServiceSpec extends WordSpec with Matchers with ScalatestRouteTest wi
     "throw a KafkaUnavailableException when Kafka is unavailable when trying to publish" in {
       a[KafkaUnavailableException] shouldBe thrownBy {
         implicit val serializer = new BytesSerializer
+
         val messageToPublish = MessageEntity(topic, "LendingClub", lendingClub)
         publish(messageToPublish)
       }
@@ -122,8 +121,8 @@ class KafkaServiceSpec extends WordSpec with Matchers with ScalatestRouteTest wi
 
         createCustomTopic(topic, Map("cleanup.policy" -> "compact"))
 
-        val zkSessionTimeoutMs = 10000
-        val zkConnectionTimeoutMs = 10000
+        val zkSessionTimeoutMs = 1000
+        val zkConnectionTimeoutMs = 1000
         val zkSecurityEnabled = false
 
         val zkUtils = ZkUtils(s"localhost:${config.zooKeeperPort}", zkSessionTimeoutMs, zkConnectionTimeoutMs, zkSecurityEnabled)
@@ -149,7 +148,7 @@ class KafkaServiceSpec extends WordSpec with Matchers with ScalatestRouteTest wi
         Await.result(currentBlock, 20.second)
 
         assert(currentTopic.code == "COGNOS200")
-        assert(currentTopic.data.get.topics.head == topic)
+        assert(currentTopic.data.get.topics.headOption.get == topic)
         assert(currentTopic.data.get.timestamp.isInstanceOf[Long])
       }
     }

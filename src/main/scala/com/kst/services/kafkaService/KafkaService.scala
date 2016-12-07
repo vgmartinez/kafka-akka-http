@@ -15,7 +15,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object KafkaService extends Config {
   val props = new Properties()
-  props.put("bootstrap.servers", kafkaHost + ":" + kafkaPort)
+  props.put("bootstrap.servers", s"$kafkaHost:$kafkaPort")
   props.put("acks", "all")
   props.put("retries", "0")
   props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
@@ -23,7 +23,7 @@ object KafkaService extends Config {
   props.put("key.deserializer","org.apache.kafka.common.serialization.StringDeserializer")
   props.put("value.deserializer","org.apache.kafka.common.serialization.StringDeserializer")
   props.put("security.protocol", s"$kafkaSecurityProtocol")
-  props.put("sasl.kerberos.service.name", "kafka")
+  //props.put("sasl.kerberos.service.name", "kafka")
 
   var consumer: KafkaConsumer[String, String] = null
   var producer: KafkaProducer[String, Array[Byte]] = null
@@ -92,7 +92,6 @@ object KafkaService extends Config {
       }
     } catch {
       case e: Exception => {
-        e.printStackTrace()
         Future.successful {
           Some(ResultTopics(500, "COGNOS500", "Internal error server"))
         }
